@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center mb-6">Flashcard App</h1>
+
+        <!-- Seção de Baralhos -->
+        <div id="deckSection" class="mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Baralhos</h2>
+            <div class="flex mb-4">
+                <input id="deckNameInput" type="text" placeholder="Nome do baralho" class="border p-2 rounded mr-2">
+                <button id="addDeckBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Adicionar Baralho</button>
+            </div>
+            <ul id="deckList" class="space-y-2"></ul>
+        </div>
+
+        <!-- Seção de Cartões -->
+        <div id="cardSection" class="hidden mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Cartões do Baralho: <span id="currentDeckName"></span></h2>
+            <div class="flex mb-4">
+                <input id="cardFrontInput" type="text" placeholder="Frente do cartão" class="border p-2 rounded mr-2">
+                <input id="cardBackInput" type="text" placeholder="Verso do cartão" class="border p-2 rounded mr-2">
+                <button id="addCardBtn" class="bg-green-500 text-white px-4 py-2 rounded">Adicionar Cartão</button>
+            </div>
+            <ul id="cardList" class="space-y-2"></ul>
+            <button id="startReviewBtn" class="bg-purple-500 text-white px-4 py-2 rounded mt-4">Iniciar Revisão</button>
+            <button id="backToDecksBtn" class="bg-gray-500 text-white px-4 py-2 rounded mt-2">Voltar aos Baralhos</button>
+        </div>
+
+        <!-- Seção de Revisão -->
+        <div id="reviewSection" class="hidden">
+            <h2 class="text-2xl font-semibold mb-4">Revisão</h2>
+            <div id="reviewCard" class="bg-white p-6 rounded shadow-lg text-center">
+                <p id="cardFront" class="text-xl mb-4"></p>
+                <p id="cardBack" class="text-xl hidden"></p>
+                <button id="showAnswerBtn" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">Mostrar Resposta</button>
+                <div id="ratingButtons" class="hidden space-x-2">
+                    <button id="rateEasyBtn" class="bg-green-500 text-white px-4 py-2 rounded">Fácil</button>
+                    <button id="rateGoodBtn" class="bg-yellow-500 text-white px-4 py-2 rounded">Bom</button>
+                    <button id="rateHardBtn" class="bg-red-500 text-white px-4 py-2 rounded">Difícil</button>
+                </div>
+            </div>
+            <button id="endReviewBtn" class="bg-gray-500 text-white px-4 py-2 rounded mt-4">Finalizar Revisão</button>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
