@@ -3,53 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flashcard App</title>
+    <title>Flashcard App Inteligente</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-100 font-sans">
-    <div class="container mx-auto p-4">
-        <h1 class="text-3xl font-bold text-center mb-6">Flashcard App</h1>
+    <div class="container mx-auto p-4 max-w-3xl">
+        <h1 class="text-3xl font-bold text-center mb-6 text-gray-700">Flashcard App Inteligente</h1>
 
-        <!-- Seção de Baralhos -->
-        <div id="deckSection" class="mb-6">
-            <h2 class="text-2xl font-semibold mb-4">Baralhos</h2>
+        <div id="deckSection">
+            <h2 class="text-2xl font-semibold mb-4">Meus Baralhos</h2>
             <div class="flex mb-4">
-                <input id="deckNameInput" type="text" placeholder="Nome do baralho" class="border p-2 rounded mr-2">
-                <button id="addDeckBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Adicionar Baralho</button>
+                <input id="deckNameInput" type="text" placeholder="Novo nome do baralho" class="border p-2 rounded-l-md flex-grow focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <button id="addDeckBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r-md">Adicionar Baralho</button>
             </div>
-            <ul id="deckList" class="space-y-2"></ul>
+            <ul id="deckList" class="space-y-3">
+                <div id="deckEmptyState" class="hidden text-center p-6 bg-white rounded-lg shadow">
+                    <p class="text-gray-500">Você ainda não tem baralhos. Crie um para começar!</p>
+                </div>
+            </ul>
         </div>
 
-        <!-- Seção de Cartões -->
-        <div id="cardSection" class="hidden mb-6">
-            <h2 class="text-2xl font-semibold mb-4">Cartões do Baralho: <span id="currentDeckName"></span></h2>
-            <div class="flex mb-4">
-                <input id="cardFrontInput" type="text" placeholder="Frente do cartão" class="border p-2 rounded mr-2">
-                <input id="cardBackInput" type="text" placeholder="Verso do cartão" class="border p-2 rounded mr-2">
-                <button id="addCardBtn" class="bg-green-500 text-white px-4 py-2 rounded">Adicionar Cartão</button>
+        <div id="cardSection" class="hidden">
+            <button id="backToDecksBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded mb-4">← Voltar aos Baralhos</button>
+            <h2 class="text-2xl font-semibold mb-4">Baralho: <span id="currentDeckName" class="text-blue-600"></span></h2>
+            <div class="bg-white p-4 rounded-lg shadow mb-4">
+                <h3 id="cardFormTitle" class="text-xl font-semibold mb-2">Adicionar Novo Cartão</h3>
+                <div class="flex flex-col sm:flex-row gap-2 mb-2">
+                    <input id="cardFrontInput" type="text" placeholder="Frente do cartão" class="border p-2 rounded-md flex-grow">
+                    <input id="cardBackInput" type="text" placeholder="Verso do cartão" class="border p-2 rounded-md flex-grow">
+                </div>
+                <button id="addOrUpdateCardBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full sm:w-auto">Adicionar Cartão</button>
+                <button id="cancelEditBtn" class="hidden bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2">Cancelar Edição</button>
             </div>
-            <ul id="cardList" class="space-y-2"></ul>
-            <button id="startReviewBtn" class="bg-purple-500 text-white px-4 py-2 rounded mt-4">Iniciar Revisão</button>
-            <button id="backToDecksBtn" class="bg-gray-500 text-white px-4 py-2 rounded mt-2">Voltar aos Baralhos</button>
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-xl font-semibold">Cartões no Baralho</h3>
+                <button id="startReviewBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded">Iniciar Revisão</button>
+            </div>
+            <ul id="cardList" class="space-y-2">
+                <div id="cardEmptyState" class="hidden text-center p-6 bg-white rounded-lg shadow">
+                    <p class="text-gray-500">Este baralho está vazio. Adicione um cartão para começar a estudar!</p>
+                </div>
+            </ul>
         </div>
 
-        <!-- Seção de Revisão -->
         <div id="reviewSection" class="hidden">
             <h2 class="text-2xl font-semibold mb-4">Revisão</h2>
-            <div id="reviewCard" class="bg-white p-6 rounded shadow-lg text-center">
-                <p id="cardFront" class="text-xl mb-4"></p>
-                <p id="cardBack" class="text-xl hidden"></p>
-                <button id="showAnswerBtn" class="bg-blue-500 text-white px-4 py-2 rounded mb-4">Mostrar Resposta</button>
-                <div id="ratingButtons" class="hidden space-x-2">
-                    <button id="rateEasyBtn" class="bg-green-500 text-white px-4 py-2 rounded">Fácil</button>
-                    <button id="rateGoodBtn" class="bg-yellow-500 text-white px-4 py-2 rounded">Bom</button>
-                    <button id="rateHardBtn" class="bg-red-500 text-white px-4 py-2 rounded">Difícil</button>
+            <div id="reviewCard" class="bg-white p-6 rounded-lg shadow-lg text-center min-h-[250px] flex flex-col justify-center">
+                <p id="cardFront" class="text-2xl mb-4"></p>
+                <p id="cardBack" class="text-xl text-gray-600 hidden"></p>
+                <button id="showAnswerBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-4 self-center">Mostrar Resposta</button>
+                <div id="ratingButtons" class="hidden flex flex-wrap justify-center gap-2">
+                    <button id="rateAgainBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded flex-grow sm:flex-grow-0">Errei (1m)</button>
+                    <button id="rateHardBtn" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded flex-grow sm:flex-grow-0">Difícil</button>
+                    <button id="rateGoodBtn" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded flex-grow sm:flex-grow-0">Bom</button>
+                    <button id="rateEasyBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded flex-grow sm:flex-grow-0">Fácil</button>
                 </div>
             </div>
-            <button id="endReviewBtn" class="bg-gray-500 text-white px-4 py-2 rounded mt-4">Finalizar Revisão</button>
+            <button id="endReviewBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded mt-4">Finalizar Revisão</button>
+        </div>
+
+        <div id="reviewSummarySection" class="hidden text-center p-8 bg-white rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-green-600 mb-4">Revisão Concluída!</h2>
+            <p id="reviewSummaryText" class="text-lg text-gray-700 mb-6"></p>
+            <button id="backToCardsBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded">Voltar ao Baralho</p>
         </div>
     </div>
+
+    <div id="toastContainer" class="fixed bottom-5 right-5 w-80 space-y-2"></div>
+
+    <template id="deckItemTemplate">
+        <li class="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <div>
+                <span class="font-semibold text-lg" data-deck-name></span>
+                <span class="text-sm text-gray-500 ml-2" data-deck-stats></span>
+            </div>
+            <div class="space-x-2">
+                <button data-action="edit" class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">Editar</button>
+                <button data-action="delete" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Excluir</button>
+                <button data-action="open" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">Abrir</button>
+            </div>
+        </li>
+    </template>
+
+    <template id="cardItemTemplate">
+        <li class="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm">
+            <div class="flex-grow">
+                <p class="font-medium" data-card-front></p>
+                <p class="text-gray-600" data-card-back></p>
+            </div>
+            <div class="space-x-2 ml-2">
+                <button data-action="edit" class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded">Editar</button>
+                <button data-action="delete" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Excluir</button>
+            </div>
+        </li>
+    </template>
+
     <script src="app.js"></script>
 </body>
 </html>

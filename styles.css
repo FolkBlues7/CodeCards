@@ -1,2 +1,30 @@
 /* Estilos personalizados podem ser adicionados aqui */
-/* Por enquanto, Tailwind CSS via CDN cuida da estilização */
+/* Tailwind CSS via CDN cuida da maior parte da estilização */
+
+/* Estilos para as Notificações Toast */
+.toast {
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    color: white;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.info {
+    background-color: #3b82f6; /* bg-blue-500 */
+}
+
+.toast.success {
+    background-color: #22c55e; /* bg-green-500 */
+}
+
+.toast.error {
+    background-color: #ef4444; /* bg-red-500 */
+}
