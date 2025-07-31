@@ -12,6 +12,7 @@
     --border-subtle: #D1D5DB;
     --yellow-medium: #FBBF24;
     --bg-light: #f9fafb;
+    --blue-skip: #3b82f6;
 }
 
 *, *::before, *::after {
@@ -45,6 +46,13 @@ body {
     transition: all 0.2s ease-in-out;
     cursor: pointer;
     border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-large {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
 }
 
 .btn-primary {
@@ -73,7 +81,7 @@ body {
     flex-direction: column;
 }
 
-/* --- Estilos do Dashboard --- */
+/* --- Estilos do Navbar --- */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -125,11 +133,12 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
-    width: 280px;
+    width: 200px;
     justify-content: flex-end;
     flex-shrink: 0;
 }
 
+/* --- Tela de Baralhos Personalizados --- */
 .deck-list-container {
     width: 100%;
     display: flex;
@@ -206,6 +215,63 @@ body {
 .deck-options .btn-icon:hover {
     background-color: #e5e7eb;
     color: var(--primary-blue-dark);
+}
+
+/* --- Tela de Code Decks --- */
+.code-decks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+.language-section {
+    background-color: var(--card-bg);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+.language-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary-blue-dark);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--primary-blue);
+}
+.level-section {
+    margin-top: 1.5rem;
+}
+.level-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-blue-light);
+    margin-bottom: 1rem;
+}
+.code-deck-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+.code-deck-card {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.code-deck-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07);
+}
+.code-deck-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--primary-blue-dark);
+    margin-bottom: 0.5rem;
+}
+.code-deck-card-count {
+    font-size: 0.875rem;
+    color: #6b7280;
 }
 
 /* --- Tela de Gerenciamento de Baralho --- */
@@ -374,16 +440,15 @@ body {
 
 .difficulty-labels {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    gap: 2.5rem;
     font-size: 1.125rem;
     font-weight: 600;
     width: 100%;
-    padding: 0 2rem;
+    padding: 0 1rem;
 }
 .text-red-error { color: var(--red-error); }
-.text-yellow-500 { color: var(--yellow-medium); }
+.text-blue-500 { color: var(--blue-skip); }
 .text-green-success { color: var(--green-success); }
 
 
@@ -401,12 +466,38 @@ body {
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
+.stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
 .stats-title {
     font-size: 1.875rem;
     font-weight: 700;
     color: var(--primary-blue-dark);
-    margin-bottom: 2.5rem;
-    text-align: center;
+}
+
+.stats-toggle {
+    background-color: var(--bg-light);
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    display: flex;
+}
+.stats-type-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+}
+.stats-type-btn.active {
+    background-color: var(--primary-blue);
+    color: var(--text-light);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .stats-grid {

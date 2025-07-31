@@ -6,6 +6,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
     // =================================================================
+    // DADOS PRÉ-DEFINIDOS (CODE DECKS)
+    // =================================================================
+    const codeDecks = [
+        {
+            language: 'JavaScript',
+            decks: [
+                { id: 'js_b_1', name: 'Variáveis e Tipos de Dados', difficulty: 'Iniciante', cards: [
+                    { id: 'js_c_1', question: 'Qual a palavra-chave para declarar uma variável que não pode ser reatribuída?', answer: 'const' },
+                    { id: 'js_c_2', question: 'Qual a diferença entre `==` e `===`?', answer: '`==` compara por valor (com coerção de tipo), `===` compara por valor e tipo (sem coerção).' },
+                ]},
+                { id: 'js_i_1', name: 'Funções e Escopo', difficulty: 'Intermediário', cards: [
+                    { id: 'js_c_3', question: 'O que é uma closure (fechamento) em JavaScript?', answer: 'É a combinação de uma função com as referências ao seu estado circundante (seu escopo léxico).' },
+                ]},
+                { id: 'js_a_1', name: 'Promises e Assincronismo', difficulty: 'Avançado', cards: [
+                    { id: 'js_c_4', question: 'O que `async/await` faz?', answer: 'É uma sintaxe para trabalhar com Promises de forma mais síncrona, tornando o código assíncrono mais fácil de ler.' },
+                ]}
+            ]
+        },
+        {
+            language: 'Python',
+            decks: [
+                { id: 'py_b_1', name: 'Estruturas de Dados Básicas', difficulty: 'Iniciante', cards: [
+                    { id: 'py_c_1', question: 'Qual a principal diferença entre uma Lista e uma Tupla em Python?', answer: 'Listas são mutáveis (podem ser alteradas), enquanto Tuplas são imutáveis.' },
+                ]}
+            ]
+        }
+    ];
+    // Adiciona propriedades de SRS aos cards pré-definidos para que possam ser estudados
+    codeDecks.forEach(lang => lang.decks.forEach(deck => {
+        deck.type = 'code'; // Identificador para o tipo de baralho
+        deck.cards.forEach(card => {
+            card.deckId = deck.id;
+            card.repetition = 0;
+            card.interval = 0;
+            card.easeFactor = EASE_FACTOR_INITIAL;
+            card.dueDate = null;
+        });
+    }));
+
+
+    // =================================================================
     // ELEMENTOS DO DOM
     // =================================================================
     const views = document.querySelectorAll('.view-container');
@@ -28,6 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
     const managerAddCardBtn = document.getElementById('manager-add-card-btn');
 
+    // Tela de Code Decks
+    const codeDecksContainer = document.getElementById('code-decks-list');
+
+    // Tela de Estatísticas
+    const statsTypeButtons = document.querySelectorAll('.stats-type-btn');
+
     // Modais
     const newDeckModal = document.getElementById('new-deck-modal');
     const editCardModal = document.getElementById('edit-card-modal');
@@ -45,10 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================
     // ESTADO DA APLICAÇÃO
     // =================================================================
-    let decks = [];
-    let cards = [];
-    let currentDeckId = null; // Para estudo ou gerenciamento
-    let currentCardId = null; // Para edição
+    let decks = []; // Baralhos do usuário
+    let cards = []; // Cartas do usuário
+    let codeCardsProgress = []; // Progresso do usuário nos code decks
+    let currentDeckId = null;
+    let currentDeckType = 'custom'; // 'custom' ou 'code'
+    let currentCardId = null; 
     let studyQueue = [];
     let currentCardIndexInQueue = 0;
     let isFlipped = false;
@@ -59,20 +108,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveData() {
         localStorage.setItem('codecards_decks', JSON.stringify(decks));
         localStorage.setItem('codecards_cards', JSON.stringify(cards));
+        localStorage.setItem('codecards_code_progress', JSON.stringify(codeCardsProgress));
     }
 
     function loadData() {
-        const storedDecks = localStorage.getItem('codecards_decks');
-        const storedCards = localStorage.getItem('codecards_cards');
-        decks = storedDecks ? JSON.parse(storedDecks) : [];
-        cards = storedCards ? JSON.parse(storedCards) : [];
+        decks = JSON.parse(localStorage.getItem('codecards_decks') || '[]');
+        cards = JSON.parse(localStorage.getItem('codecards_cards') || '[]');
+        codeCardsProgress = JSON.parse(localStorage.getItem('codecards_code_progress') || '[]');
     }
     
     // =================================================================
     // LÓGICA DE REPETIÇÃO ESPAÇADA (SRS)
     // =================================================================
     function scheduleCard(card, quality) {
-        if (quality < 3) {
+        if (quality < 3) { // Errou
             card.interval = 1;
             card.repetition = 0;
         } else {
@@ -88,6 +137,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const now = new Date();
         now.setHours(0, 0, 0, 0);
         card.dueDate = now.getTime() + card.interval * ONE_DAY_IN_MS;
+        
+        // Salva o progresso dependendo do tipo de carta
+        if (currentDeckType === 'custom') {
+            const cardToUpdate = cards.find(c => c.id === card.id);
+            Object.assign(cardToUpdate, card);
+        } else {
+            const progress = codeCardsProgress.find(p => p.id === card.id);
+            if (progress) {
+                Object.assign(progress, card);
+            } else {
+                codeCardsProgress.push(card);
+            }
+        }
         saveData();
     }
 
@@ -96,15 +158,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================
     function switchView(viewId) {
         views.forEach(view => view.classList.add('hidden'));
-        document.getElementById(viewId).classList.remove('hidden');
-        document.getElementById(viewId).style.display = 'flex';
+        const activeView = document.getElementById(viewId);
+        activeView.classList.remove('hidden');
+        activeView.style.display = 'flex';
 
         navButtons.forEach(btn => {
             btn.classList.toggle('active', btn.dataset.view === viewId);
         });
 
-        if (viewId === 'stats-view') renderStatistics();
+        if (viewId === 'stats-view') renderStatistics('custom');
         if (viewId === 'dashboard-view') renderDecks();
+        if (viewId === 'code-decks-view') renderCodeDecks();
     }
 
     function renderDecks() {
@@ -120,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const deckElement = document.createElement('div');
             deckElement.className = 'deck-item';
             deckElement.innerHTML = `
-                <div class="deck-name-container" data-deck-id="${deck.id}">
+                <div class="deck-name-container" data-deck-id="${deck.id}" data-deck-type="custom">
                     <i class="fa-solid fa-layer-group"></i><span>${deck.name}</span>
                 </div>
                 <div class="deck-stats-container">
@@ -133,6 +197,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             deckListContainer.appendChild(deckElement);
+        });
+    }
+
+    function renderCodeDecks() {
+        codeDecksContainer.innerHTML = '';
+        codeDecks.forEach(lang => {
+            const langSection = document.createElement('div');
+            langSection.className = 'language-section';
+            langSection.innerHTML = `<h3 class="language-title">${lang.language}</h3>`;
+            
+            const levels = { 'Iniciante': [], 'Intermediário': [], 'Avançado': [] };
+            lang.decks.forEach(deck => levels[deck.difficulty].push(deck));
+
+            Object.keys(levels).forEach(level => {
+                if (levels[level].length > 0) {
+                    const levelSection = document.createElement('div');
+                    levelSection.className = 'level-section';
+                    levelSection.innerHTML = `<h4 class="level-title">${level}</h4>`;
+                    
+                    const deckGrid = document.createElement('div');
+                    deckGrid.className = 'code-deck-grid';
+
+                    levels[level].forEach(deck => {
+                        const deckCard = document.createElement('div');
+                        deckCard.className = 'code-deck-card';
+                        deckCard.dataset.deckId = deck.id;
+                        deckCard.dataset.deckType = 'code';
+                        deckCard.innerHTML = `
+                            <div class="code-deck-name">${deck.name}</div>
+                            <div class="code-deck-card-count">${deck.cards.length} cartas</div>
+                        `;
+                        deckGrid.appendChild(deckCard);
+                    });
+                    levelSection.appendChild(deckGrid);
+                    langSection.appendChild(levelSection);
+                }
+            });
+            codeDecksContainer.appendChild(langSection);
         });
     }
 
@@ -165,10 +267,24 @@ document.addEventListener('DOMContentLoaded', () => {
         switchView('deck-manager-view');
     }
 
-    function startStudy(deckId) {
+    function startStudy(deckId, deckType) {
         currentDeckId = deckId;
+        currentDeckType = deckType;
         const todayTimestamp = new Date().setHours(0, 0, 0, 0);
-        const cardsForDeck = cards.filter(c => c.deckId === deckId);
+
+        let cardsForDeck;
+        if (deckType === 'custom') {
+            cardsForDeck = cards.filter(c => c.deckId === deckId);
+        } else { // 'code'
+            const lang = codeDecks.find(l => l.decks.some(d => d.id === deckId));
+            const deck = lang.decks.find(d => d.id === deckId);
+            // Pega as cartas originais e sobrepõe o progresso salvo
+            cardsForDeck = deck.cards.map(originalCard => {
+                const progress = codeCardsProgress.find(p => p.id === originalCard.id);
+                return progress ? {...progress} : {...originalCard};
+            });
+        }
+
         const dueCards = cardsForDeck.filter(c => c.dueDate && c.dueDate <= todayTimestamp);
         const newCards = cardsForDeck.filter(c => !c.dueDate).slice(0, 10);
 
@@ -213,19 +329,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleDifficulty(quality) {
+        // quality: 0 = Errei, 3 = Pular, 5 = Acertei
+        if (quality === 3) { // Pular
+            currentCardIndexInQueue++;
+            setTimeout(() => loadCard(currentCardIndexInQueue), 300);
+            return;
+        }
         const card = studyQueue[currentCardIndexInQueue];
         scheduleCard(card, quality);
         currentCardIndexInQueue++;
         setTimeout(() => loadCard(currentCardIndexInQueue), 300);
     }
 
-    function renderStatistics() {
+    function renderStatistics(type) {
+        statsTypeButtons.forEach(b => b.classList.toggle('active', b.dataset.type === type));
+        
+        const sourceCards = type === 'custom' ? cards : codeCardsProgress;
+
         const forecastData = { labels: [], data: [] };
         const today = new Date().setHours(0, 0, 0, 0);
         for (let i = 0; i < 7; i++) {
             const date = new Date(today + i * ONE_DAY_IN_MS);
             forecastData.labels.push(date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }));
-            const count = cards.filter(c => c.dueDate && new Date(c.dueDate).setHours(0,0,0,0) === date.getTime()).length;
+            const count = sourceCards.filter(c => c.dueDate && new Date(c.dueDate).setHours(0,0,0,0) === date.getTime()).length;
             forecastData.data.push(count);
         }
 
@@ -236,9 +362,9 @@ document.addEventListener('DOMContentLoaded', () => {
             options: { scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
         });
 
-        const newCount = cards.filter(c => !c.dueDate).length;
-        const learningCount = cards.filter(c => c.dueDate && c.interval < 21).length;
-        const matureCount = cards.filter(c => c.dueDate && c.interval >= 21).length;
+        const newCount = sourceCards.filter(c => !c.dueDate).length;
+        const learningCount = sourceCards.filter(c => c.dueDate && c.interval < 21).length;
+        const matureCount = sourceCards.filter(c => c.dueDate && c.interval >= 21).length;
         
         if (cardDistributionChart) cardDistributionChart.destroy();
         cardDistributionChart = new Chart(cardDistributionChartCtx, {
@@ -263,7 +389,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openCardModalForCreation() {
-        // Limpa o formulário de edição (que é o mesmo modal)
         editCardModal.querySelector('.modal-title').textContent = 'Adicionar Nova Carta';
         confirmCardEditBtn.textContent = 'Adicionar';
         currentCardId = null; 
@@ -323,8 +448,13 @@ document.addEventListener('DOMContentLoaded', () => {
     deckListContainer.addEventListener('click', (e) => {
         const studyTarget = e.target.closest('.deck-name-container');
         const manageTarget = e.target.closest('.manage-deck-btn');
-        if (studyTarget) startStudy(parseInt(studyTarget.dataset.deckId));
+        if (studyTarget) startStudy(parseInt(studyTarget.dataset.deckId), studyTarget.dataset.deckType);
         if (manageTarget) renderCardManager(parseInt(manageTarget.dataset.deckId));
+    });
+
+    codeDecksContainer.addEventListener('click', (e) => {
+        const studyTarget = e.target.closest('.code-deck-card');
+        if (studyTarget) startStudy(studyTarget.dataset.deckId, studyTarget.dataset.deckType);
     });
 
     cardListContainer.addEventListener('click', (e) => {
@@ -338,6 +468,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const button = e.target.closest('.difficulty-btn');
         if (button) handleDifficulty(parseInt(button.dataset.difficulty));
     });
+
+    statsTypeButtons.forEach(btn => btn.addEventListener('click', () => renderStatistics(btn.dataset.type)));
 
     // Modais
     newDeckBtn.addEventListener('click', () => showModal(newDeckModal));

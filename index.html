@@ -4,34 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeCards - Aprenda Programação</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
-  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-   
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <div id="app" class="main-container">
 
-       
         <div id="dashboard-view" class="view-container w-full max-w-7xl">
             <nav class="navbar">
                 <div class="logo">CC</div>
                 <div class="nav-links">
                     <div class="nav-links-inner">
-                        <button data-view="dashboard-view" class="nav-button active">Baralhos</button>
+                        <button data-view="dashboard-view" class="nav-button active">Meus Baralhos</button>
+                        <button data-view="code-decks-view" class="nav-button">Code Decks</button>
                         <button data-view="stats-view" class="nav-button">Estatisticas</button>
                     </div>
                 </div>
                 <div class="nav-actions">
-                    <button class="btn btn-secondary">Importar arquivo</button>
-                    <button id="new-deck-btn" class="btn btn-primary">Novo baralho</button>
+                    <button id="new-deck-btn" class="btn btn-primary btn-large">Novo baralho</button>
                 </div>
             </nav>
 
@@ -50,7 +44,22 @@
             </main>
         </div>
 
-        <!-- TELA DE GERENCIAMENTO DE BARALHO -->
+        <div id="code-decks-view" class="hidden view-container w-full max-w-7xl">
+             <nav class="navbar">
+                <div class="logo">CC</div>
+                <div class="nav-links">
+                    <div class="nav-links-inner">
+                        <button data-view="dashboard-view" class="nav-button">Meus Baralhos</button>
+                        <button data-view="code-decks-view" class="nav-button active">Code Decks</button>
+                        <button data-view="stats-view" class="nav-button">Estatisticas</button>
+                    </div>
+                </div>
+                <div class="nav-actions-placeholder"></div>
+            </nav>
+            <main id="code-decks-list" class="code-decks-container">
+            </main>
+        </div>
+
         <div id="deck-manager-view" class="hidden view-container deck-manager-container">
             <header class="manager-header">
                 <button id="back-to-dashboard-btn" class="btn btn-secondary"><i class="fa-solid fa-arrow-left mr-2"></i> Voltar</button>
@@ -62,12 +71,11 @@
             </main>
         </div>
 
-        <!-- TELA DE ESTUDO -->
         <div id="study-view" class="hidden view-container study-view-container">
              <header class="study-header">
                  <div class="logo-study">CC</div>
                  <div id="card-counter" class="card-counter-text"></div>
-                 <div class="w-24"></div> <!-- Placeholder for alignment -->
+                 <div class="w-24"></div>
             </header>
            
             <div id="flashcard-container" class="flashcard-container">
@@ -80,12 +88,12 @@
             <div id="answer-options" class="hidden answer-options-container">
                 <div class="difficulty-buttons">
                      <button data-difficulty="0" class="difficulty-btn bg-red-error"><i class="fa-solid fa-xmark text-2xl"></i></button>
-                    <button data-difficulty="3" class="difficulty-btn bg-yellow-500"><i class="fa-solid fa-minus text-2xl"></i></button>
+                    <button data-difficulty="3" class="difficulty-btn bg-blue-500"><i class="fa-solid fa-forward text-2xl"></i></button>
                     <button data-difficulty="5" class="difficulty-btn bg-green-success"><i class="fa-solid fa-check text-2xl"></i></button>
                 </div>
                 <div class="difficulty-labels">
                     <div class="text-red-error">Errei</div>
-                    <div class="text-yellow-500">Hesitei</div>
+                    <div class="text-blue-500">Pular</div>
                     <div class="text-green-success">Acertei</div>
                 </div>
             </div>
@@ -95,20 +103,26 @@
             </footer>
         </div>
 
-        <!-- TELA DE ESTATÍSTICAS -->
         <div id="stats-view" class="hidden view-container w-full max-w-7xl">
             <nav class="navbar">
                 <div class="logo">CC</div>
                 <div class="nav-links">
                     <div class="nav-links-inner">
-                        <button data-view="dashboard-view" class="nav-button">Baralhos</button>
+                        <button data-view="dashboard-view" class="nav-button">Meus Baralhos</button>
+                        <button data-view="code-decks-view" class="nav-button">Code Decks</button>
                         <button data-view="stats-view" class="nav-button active">Estatisticas</button>
                     </div>
                 </div>
                 <div class="nav-actions-placeholder"></div>
             </nav>
             <main class="stats-main-container">
-                <h2 class="stats-title">Estatísticas Gerais</h2>
+                <div class="stats-header">
+                    <h2 class="stats-title">Estatísticas</h2>
+                    <div class="stats-toggle">
+                        <button class="stats-type-btn active" data-type="custom">Personalizados</button>
+                        <button class="stats-type-btn" data-type="code">Code Decks</button>
+                    </div>
+                </div>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h3 class="stat-card-title">Previsão de Revisões</h3>
@@ -124,7 +138,6 @@
 
     </div>
 
-   
     <div id="new-deck-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <h3 class="modal-title">Criar Novo Baralho</h3>
