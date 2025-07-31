@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeCards - Aprenda Programação</title>
+    <!-- TailwindCSS para prototipagem rápida de layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Fonte Roboto do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Link para o arquivo CSS customizado -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="app" class="main-container">
+
+        <!-- TELA PRINCIPAL (DASHBOARD) -->
+        <div id="dashboard-view" class="view-container w-full max-w-7xl">
+            <!-- Navbar -->
+            <nav class="navbar">
+                <div class="logo">CC</div>
+                <div class="nav-links">
+                    <button data-view="dashboard-view" class="nav-button active">Baralhos</button>
+                    <button data-view="stats-view" class="nav-button">Estatisticas</button>
+                </div>
+                <div class="nav-actions">
+                    <button class="btn btn-secondary">Importar arquivo</button>
+                    <button id="new-deck-btn" class="btn btn-primary">Novo baralho</button>
+                </div>
+            </nav>
+
+            <!-- Lista de Baralhos -->
+            <main class="deck-list-container">
+                <div class="deck-list-card">
+                    <!-- Cabeçalho da Tabela -->
+                    <div class="deck-list-header">
+                        <div class="flex-1">Baralhos</div>
+                        <div class="deck-stats-header">
+                            <div class="w-1/3 text-center">Novos</div>
+                            <div class="w-1/3 text-center">Aprendendo</div>
+                            <div class="w-1/3 text-center">Revisar</div>
+                        </div>
+                    </div>
+                    <!-- Corpo da Tabela -->
+                    <div id="deck-list" class="divide-y divide-gray-200">
+                        <!-- Os baralhos serão inseridos aqui pelo JavaScript -->
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- TELA DE ESTUDO -->
+        <div id="study-view" class="hidden view-container study-view-container">
+             <header class="study-header">
+                 <div class="logo-study">CC</div>
+                 <div id="card-counter" class="card-counter-text"></div>
+                 <button id="add-card-to-deck-btn" class="btn btn-primary">Adicionar Carta</button>
+            </header>
+           
+            <div id="flashcard-container" class="flashcard-container">
+                <div id="flashcard" class="flashcard">
+                    <div id="flashcard-front" class="flashcard-face flashcard-front"></div>
+                    <div id="flashcard-back" class="flashcard-face flashcard-back"></div>
+                </div>
+            </div>
+
+            <div id="answer-options" class="hidden answer-options-container">
+                <div class="difficulty-buttons">
+                     <button data-difficulty="0" class="difficulty-btn bg-red-error"><i class="fa-solid fa-xmark text-2xl"></i></button>
+                    <button data-difficulty="3" class="difficulty-btn bg-yellow-500"><i class="fa-solid fa-minus text-2xl"></i></button>
+                    <button data-difficulty="5" class="difficulty-btn bg-green-success"><i class="fa-solid fa-check text-2xl"></i></button>
+                </div>
+                <div class="difficulty-labels">
+                    <div class="text-red-error">Errei</div>
+                    <div class="text-yellow-500">Hesitei</div>
+                    <div class="text-green-success">Acertei</div>
+                </div>
+            </div>
+            
+            <footer class="study-footer">
+                 <button id="exit-study-btn" class="btn btn-secondary">Voltar</button>
+            </footer>
+        </div>
+
+        <!-- TELA DE ESTATÍSTICAS -->
+        <div id="stats-view" class="hidden view-container w-full max-w-7xl">
+            <nav class="navbar">
+                <div class="logo">CC</div>
+                <div class="nav-links">
+                    <button data-view="dashboard-view" class="nav-button">Baralhos</button>
+                    <button data-view="stats-view" class="nav-button active">Estatisticas</button>
+                </div>
+                <div class="nav-actions-placeholder"></div>
+            </nav>
+            <main class="stats-main-container">
+                <h2 class="stats-title">Estatísticas Gerais</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 class="stat-card-title">Previsão de Revisões</h3>
+                        <canvas id="forecast-chart"></canvas>
+                    </div>
+                    <div class="stat-card">
+                        <h3 class="stat-card-title">Distribuição dos Cartões</h3>
+                        <canvas id="card-distribution-chart"></canvas>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+    </div>
+
+    <!-- MODAIS -->
+    <div id="new-deck-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 class="modal-title">Criar Novo Baralho</h3>
+            <input type="text" id="new-deck-name" placeholder="Nome do baralho" class="modal-input">
+            <div class="modal-actions">
+                <button class="btn btn-secondary" data-action="close-modal">Cancelar</button>
+                <button id="confirm-deck-creation" class="btn btn-primary">Criar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="new-card-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 class="modal-title">Adicionar Nova Carta</h3>
+            <textarea id="new-card-question" placeholder="Frente (Pergunta)" class="modal-textarea"></textarea>
+            <textarea id="new-card-answer" placeholder="Verso (Resposta)" class="modal-textarea"></textarea>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" data-action="close-modal">Cancelar</button>
+                <button id="confirm-card-creation" class="btn btn-primary">Adicionar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
