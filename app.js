@@ -63,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         decks.forEach(deck => {
             const clone = template.content.cloneNode(true);
             const now = new Date();
-            // CORREÇÃO: Adicionada verificação para c.next_review para evitar erros com dados antigos
             const dueCardsCount = deck.cards.filter(c => c && c.next_review && new Date(c.next_review) <= now).length;
 
             clone.querySelector('[data-deck-name]').textContent = deck.name;
@@ -336,15 +335,22 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const showNextCardToReview = () => {
-        let nextCard = reviewSession.learningQueue.shift();
-        if (!nextCard) {
+        let nextCard = null;
+
+        // CORREÇÃO: Prioriza a fila de revisão principal.
+        if (reviewSession.dueQueue.length > 0) {
             nextCard = reviewSession.dueQueue.shift();
+        }
+        // Se a fila principal estiver vazia, começa a trabalhar nos cartões que erramos.
+        else if (reviewSession.learningQueue.length > 0) {
+            nextCard = reviewSession.learningQueue.shift();
         }
 
         if (nextCard) {
             reviewSession.currentCard = nextCard;
             showCardOnReviewScreen(nextCard);
         } else {
+            // Isso é chamado quando ambas as filas estão vazias.
             endReviewSession();
         }
     };
@@ -379,19 +385,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const now = new Date();
         const intervals = calculateNextIntervals(card);
         let nextIntervalMinutes;
+        let cardGraduated = false;
 
         switch (rating) {
             case 'again':
                 card.repetitions = 0;
                 card.learning_step = 1;
                 nextIntervalMinutes = intervals.again;
-                // Deixa o cartão na frente da fila para ser o próximo
-                reviewSession.learningQueue.unshift(card);
+                reviewSession.learningQueue.push(card);
                 break;
             case 'hard':
                 card.ease_factor = Math.max(1.3, card.ease_factor - 0.2);
                 nextIntervalMinutes = intervals.hard;
-                reviewSession.learningQueue.push(card); // Adiciona no fim
+                reviewSession.learningQueue.push(card);
                 break;
             case 'good':
                 if (card.learning_step > 0) {
@@ -400,6 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.repetitions++;
                 nextIntervalMinutes = intervals.good;
                 card.interval = nextIntervalMinutes;
+                cardGraduated = true;
                 break;
             case 'easy':
                 card.ease_factor += 0.15;
@@ -409,12 +416,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.repetitions++;
                 nextIntervalMinutes = intervals.easy;
                 card.interval = nextIntervalMinutes;
+                cardGraduated = true;
                 break;
         }
         
         card.next_review = new Date(now.getTime() + nextIntervalMinutes * 60 * 1000).toISOString();
         
-        if(rating !== 'again') {
+        if (cardGraduated) {
             reviewSession.cardsReviewed++;
         }
 
@@ -453,7 +461,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- EVENT LISTENERS ---
     document.getElementById('addDeckBtn').addEventListener('click', addDeck);
     
-    // CORREÇÃO: Listener refatorado para ser mais robusto
     document.getElementById('deckList').addEventListener('click', (e) => {
         const button = e.target.closest('button[data-action]');
         if (!button) return;
