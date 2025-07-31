@@ -4,29 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeCards - Aprenda Programação</title>
-    <!-- TailwindCSS para prototipagem rápida de layout -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome para ícones -->
+  
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Fonte Roboto do Google Fonts -->
+   
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chart.js para gráficos -->
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Link para o arquivo CSS customizado -->
+   
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <div id="app" class="main-container">
 
-        <!-- TELA PRINCIPAL (DASHBOARD) -->
+       
         <div id="dashboard-view" class="view-container w-full max-w-7xl">
-            <!-- Navbar -->
             <nav class="navbar">
                 <div class="logo">CC</div>
                 <div class="nav-links">
-                    <button data-view="dashboard-view" class="nav-button active">Baralhos</button>
-                    <button data-view="stats-view" class="nav-button">Estatisticas</button>
+                    <div class="nav-links-inner">
+                        <button data-view="dashboard-view" class="nav-button active">Baralhos</button>
+                        <button data-view="stats-view" class="nav-button">Estatisticas</button>
+                    </div>
                 </div>
                 <div class="nav-actions">
                     <button class="btn btn-secondary">Importar arquivo</button>
@@ -34,10 +35,8 @@
                 </div>
             </nav>
 
-            <!-- Lista de Baralhos -->
             <main class="deck-list-container">
                 <div class="deck-list-card">
-                    <!-- Cabeçalho da Tabela -->
                     <div class="deck-list-header">
                         <div class="flex-1">Baralhos</div>
                         <div class="deck-stats-header">
@@ -46,11 +45,20 @@
                             <div class="w-1/3 text-center">Revisar</div>
                         </div>
                     </div>
-                    <!-- Corpo da Tabela -->
-                    <div id="deck-list" class="divide-y divide-gray-200">
-                        <!-- Os baralhos serão inseridos aqui pelo JavaScript -->
-                    </div>
+                    <div id="deck-list" class="divide-y divide-gray-200"></div>
                 </div>
+            </main>
+        </div>
+
+        <!-- TELA DE GERENCIAMENTO DE BARALHO -->
+        <div id="deck-manager-view" class="hidden view-container deck-manager-container">
+            <header class="manager-header">
+                <button id="back-to-dashboard-btn" class="btn btn-secondary"><i class="fa-solid fa-arrow-left mr-2"></i> Voltar</button>
+                <h2 id="manager-deck-title" class="manager-header-title"></h2>
+                <button id="manager-add-card-btn" class="btn btn-primary"><i class="fa-solid fa-plus mr-2"></i> Nova Carta</button>
+            </header>
+            <main class="card-list-container">
+                <div id="card-list"></div>
             </main>
         </div>
 
@@ -59,7 +67,7 @@
              <header class="study-header">
                  <div class="logo-study">CC</div>
                  <div id="card-counter" class="card-counter-text"></div>
-                 <button id="add-card-to-deck-btn" class="btn btn-primary">Adicionar Carta</button>
+                 <div class="w-24"></div> <!-- Placeholder for alignment -->
             </header>
            
             <div id="flashcard-container" class="flashcard-container">
@@ -83,7 +91,7 @@
             </div>
             
             <footer class="study-footer">
-                 <button id="exit-study-btn" class="btn btn-secondary">Voltar</button>
+                 <button id="exit-study-btn" class="btn btn-secondary">Sair da Sessão</button>
             </footer>
         </div>
 
@@ -92,8 +100,10 @@
             <nav class="navbar">
                 <div class="logo">CC</div>
                 <div class="nav-links">
-                    <button data-view="dashboard-view" class="nav-button">Baralhos</button>
-                    <button data-view="stats-view" class="nav-button active">Estatisticas</button>
+                    <div class="nav-links-inner">
+                        <button data-view="dashboard-view" class="nav-button">Baralhos</button>
+                        <button data-view="stats-view" class="nav-button active">Estatisticas</button>
+                    </div>
                 </div>
                 <div class="nav-actions-placeholder"></div>
             </nav>
@@ -114,7 +124,7 @@
 
     </div>
 
-    <!-- MODAIS -->
+   
     <div id="new-deck-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <h3 class="modal-title">Criar Novo Baralho</h3>
@@ -126,14 +136,14 @@
         </div>
     </div>
 
-    <div id="new-card-modal" class="modal-overlay hidden">
+    <div id="edit-card-modal" class="modal-overlay hidden">
         <div class="modal-content">
-            <h3 class="modal-title">Adicionar Nova Carta</h3>
-            <textarea id="new-card-question" placeholder="Frente (Pergunta)" class="modal-textarea"></textarea>
-            <textarea id="new-card-answer" placeholder="Verso (Resposta)" class="modal-textarea"></textarea>
+            <h3 class="modal-title">Editar Carta</h3>
+            <textarea id="edit-card-question" placeholder="Frente (Pergunta)" class="modal-textarea"></textarea>
+            <textarea id="edit-card-answer" placeholder="Verso (Resposta)" class="modal-textarea"></textarea>
             <div class="modal-actions">
                 <button class="btn btn-secondary" data-action="close-modal">Cancelar</button>
-                <button id="confirm-card-creation" class="btn btn-primary">Adicionar</button>
+                <button id="confirm-card-edit" class="btn btn-primary">Salvar Alterações</button>
             </div>
         </div>
     </div>

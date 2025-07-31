@@ -13,9 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const deckListContainer = document.getElementById('deck-list');
     const newDeckBtn = document.getElementById('new-deck-btn');
     const exitStudyBtn = document.getElementById('exit-study-btn');
-    const addCardToDeckBtn = document.getElementById('add-card-to-deck-btn');
     
-    // Elementos da tela de estudo
+    // Tela de Estudo
     const flashcardContainer = document.getElementById('flashcard-container');
     const flashcard = document.getElementById('flashcard');
     const flashcardFront = document.getElementById('flashcard-front');
@@ -23,14 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const cardCounter = document.getElementById('card-counter');
     const answerOptions = document.getElementById('answer-options');
 
+    // Tela de Gerenciamento
+    const managerDeckTitle = document.getElementById('manager-deck-title');
+    const cardListContainer = document.getElementById('card-list');
+    const backToDashboardBtn = document.getElementById('back-to-dashboard-btn');
+    const managerAddCardBtn = document.getElementById('manager-add-card-btn');
+
     // Modais
     const newDeckModal = document.getElementById('new-deck-modal');
-    const newCardModal = document.getElementById('new-card-modal');
+    const editCardModal = document.getElementById('edit-card-modal');
     const newDeckNameInput = document.getElementById('new-deck-name');
     const confirmDeckCreationBtn = document.getElementById('confirm-deck-creation');
-    const newCardQuestionInput = document.getElementById('new-card-question');
-    const newCardAnswerInput = document.getElementById('new-card-answer');
-    const confirmCardCreationBtn = document.getElementById('confirm-card-creation');
+    const editCardQuestionInput = document.getElementById('edit-card-question');
+    const editCardAnswerInput = document.getElementById('edit-card-answer');
+    const confirmCardEditBtn = document.getElementById('confirm-card-edit');
     
     // Gráficos
     const forecastChartCtx = document.getElementById('forecast-chart').getContext('2d');
@@ -42,7 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================
     let decks = [];
     let cards = [];
-    let currentStudyDeck = null;
+    let currentDeckId = null; // Para estudo ou gerenciamento
+    let currentCardId = null; // Para edição
     let studyQueue = [];
     let currentCardIndexInQueue = 0;
     let isFlipped = false;
@@ -66,17 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // LÓGICA DE REPETIÇÃO ESPAÇADA (SRS)
     // =================================================================
     function scheduleCard(card, quality) {
-        if (quality < 3) { // Errou
+        if (quality < 3) {
             card.interval = 1;
             card.repetition = 0;
         } else {
-            if (card.repetition === 0) {
-                card.interval = 1;
-            } else if (card.repetition === 1) {
-                card.interval = 6;
-            } else {
-                card.interval = Math.round(card.interval * card.easeFactor);
-            }
+            if (card.repetition === 0) card.interval = 1;
+            else if (card.repetition === 1) card.interval = 6;
+            else card.interval = Math.round(card.interval * card.easeFactor);
             card.repetition += 1;
         }
 
@@ -86,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const now = new Date();
         now.setHours(0, 0, 0, 0);
         card.dueDate = now.getTime() + card.interval * ONE_DAY_IN_MS;
-        
         saveData();
     }
 
@@ -96,55 +97,82 @@ document.addEventListener('DOMContentLoaded', () => {
     function switchView(viewId) {
         views.forEach(view => view.classList.add('hidden'));
         document.getElementById(viewId).classList.remove('hidden');
+        document.getElementById(viewId).style.display = 'flex';
 
         navButtons.forEach(btn => {
             btn.classList.toggle('active', btn.dataset.view === viewId);
         });
 
-        if (viewId === 'stats-view') {
-            renderStatistics();
-        }
+        if (viewId === 'stats-view') renderStatistics();
+        if (viewId === 'dashboard-view') renderDecks();
     }
 
     function renderDecks() {
         deckListContainer.innerHTML = '';
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const todayTimestamp = today.getTime();
+        const todayTimestamp = new Date().setHours(0, 0, 0, 0);
 
         decks.forEach(deck => {
             const deckCards = cards.filter(c => c.deckId === deck.id);
             const newCount = deckCards.filter(c => !c.dueDate).length;
-            const learningCount = deckCards.filter(c => c.dueDate && c.interval < 21).length; // Ex: < 21 dias = aprendendo
+            const learningCount = deckCards.filter(c => c.dueDate && c.interval < 21).length;
             const reviewCount = deckCards.filter(c => c.dueDate && c.dueDate <= todayTimestamp).length;
 
             const deckElement = document.createElement('div');
             deckElement.className = 'deck-item';
             deckElement.innerHTML = `
-                <div class="deck-name-container"><i class="fa-solid fa-layer-group"></i><span>${deck.name}</span></div>
+                <div class="deck-name-container" data-deck-id="${deck.id}">
+                    <i class="fa-solid fa-layer-group"></i><span>${deck.name}</span>
+                </div>
                 <div class="deck-stats-container">
                     <div class="w-1/3 text-center text-blue-600">${newCount}</div>
                     <div class="w-1/3 text-center text-yellow-600">${learningCount}</div>
                     <div class="w-1/3 text-center text-red-error">${reviewCount}</div>
                 </div>
+                <div class="deck-options">
+                    <button class="btn-icon manage-deck-btn" data-deck-id="${deck.id}"><i class="fa-solid fa-gear"></i></button>
+                </div>
             `;
-            deckElement.addEventListener('click', () => startStudy(deck.id));
             deckListContainer.appendChild(deckElement);
         });
     }
 
-    function startStudy(deckId) {
-        currentStudyDeck = decks.find(d => d.id === deckId);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const todayTimestamp = today.getTime();
+    function renderCardManager(deckId) {
+        const deck = decks.find(d => d.id === deckId);
+        if (!deck) return;
+        
+        currentDeckId = deckId;
+        managerDeckTitle.textContent = deck.name;
+        cardListContainer.innerHTML = '';
 
+        const deckCards = cards.filter(c => c.deckId === deckId);
+        if(deckCards.length === 0) {
+            cardListContainer.innerHTML = `<p class="text-center text-gray-500 p-4">Nenhuma carta neste baralho. Adicione uma!</p>`;
+        } else {
+            deckCards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card-item';
+                cardEl.innerHTML = `
+                    <div class="card-text">${card.question}</div>
+                    <div class="card-text">${card.answer}</div>
+                    <div class="card-actions">
+                        <button class="btn-icon edit-card-btn" data-card-id="${card.id}"><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn-icon delete-card-btn" data-card-id="${card.id}"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                cardListContainer.appendChild(cardEl);
+            });
+        }
+        switchView('deck-manager-view');
+    }
+
+    function startStudy(deckId) {
+        currentDeckId = deckId;
+        const todayTimestamp = new Date().setHours(0, 0, 0, 0);
         const cardsForDeck = cards.filter(c => c.deckId === deckId);
         const dueCards = cardsForDeck.filter(c => c.dueDate && c.dueDate <= todayTimestamp);
-        const newCards = cardsForDeck.filter(c => !c.dueDate).slice(0, 10); // Limita a 10 novas cartas por sessão
+        const newCards = cardsForDeck.filter(c => !c.dueDate).slice(0, 10);
 
         studyQueue = [...dueCards, ...newCards];
-        
         if (studyQueue.length === 0) {
             alert("Nenhum cartão para estudar neste baralho hoje!");
             return;
@@ -187,47 +215,27 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleDifficulty(quality) {
         const card = studyQueue[currentCardIndexInQueue];
         scheduleCard(card, quality);
-        
         currentCardIndexInQueue++;
         setTimeout(() => loadCard(currentCardIndexInQueue), 300);
     }
 
-    // --- Funções de Estatísticas ---
     function renderStatistics() {
-        // Previsão de Revisões
         const forecastData = { labels: [], data: [] };
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        const today = new Date().setHours(0, 0, 0, 0);
         for (let i = 0; i < 7; i++) {
-            const date = new Date(today.getTime() + i * ONE_DAY_IN_MS);
-            const dateString = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-            forecastData.labels.push(dateString);
-            const count = cards.filter(c => {
-                if (!c.dueDate) return false;
-                const dueDate = new Date(c.dueDate);
-                dueDate.setHours(0,0,0,0);
-                return dueDate.getTime() === date.getTime();
-            }).length;
+            const date = new Date(today + i * ONE_DAY_IN_MS);
+            forecastData.labels.push(date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }));
+            const count = cards.filter(c => c.dueDate && new Date(c.dueDate).setHours(0,0,0,0) === date.getTime()).length;
             forecastData.data.push(count);
         }
 
         if (forecastChart) forecastChart.destroy();
         forecastChart = new Chart(forecastChartCtx, {
             type: 'bar',
-            data: {
-                labels: forecastData.labels,
-                datasets: [{
-                    label: 'Cartões para Revisar',
-                    data: forecastData.data,
-                    backgroundColor: 'rgba(29, 78, 216, 0.7)',
-                    borderColor: 'rgba(29, 78, 216, 1)',
-                    borderWidth: 1
-                }]
-            },
+            data: { labels: forecastData.labels, datasets: [{ label: 'Cartões para Revisar', data: forecastData.data, backgroundColor: 'rgba(29, 78, 216, 0.7)' }] },
             options: { scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
         });
 
-        // Distribuição de Cartões
         const newCount = cards.filter(c => !c.dueDate).length;
         const learningCount = cards.filter(c => c.dueDate && c.interval < 21).length;
         const matureCount = cards.filter(c => c.dueDate && c.interval >= 21).length;
@@ -235,24 +243,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cardDistributionChart) cardDistributionChart.destroy();
         cardDistributionChart = new Chart(cardDistributionChartCtx, {
             type: 'doughnut',
-            data: {
-                labels: ['Novos', 'Aprendendo', 'Maduros'],
-                datasets: [{
-                    data: [newCount, learningCount, matureCount],
-                    backgroundColor: ['#3b82f6', '#f59e0b', '#16a34a']
-                }]
-            }
+            data: { labels: ['Novos', 'Aprendendo', 'Maduros'], datasets: [{ data: [newCount, learningCount, matureCount], backgroundColor: ['#3b82f6', '#f59e0b', '#16a34a'] }] }
         });
     }
 
-    // --- Funções de Modal ---
-    function showModal(modal) {
-        modal.classList.remove('hidden');
-    }
-
-    function hideModal(modal) {
-        modal.classList.add('hidden');
-    }
+    // --- Funções de Ações e Modais ---
+    function showModal(modal) { modal.classList.remove('hidden'); }
+    function hideModal(modal) { modal.classList.add('hidden'); }
 
     function createNewDeck() {
         const name = newDeckNameInput.value.trim();
@@ -265,31 +262,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function createNewCard() {
-        const question = newCardQuestionInput.value.trim();
-        const answer = newCardAnswerInput.value.trim();
+    function openCardModalForCreation() {
+        // Limpa o formulário de edição (que é o mesmo modal)
+        editCardModal.querySelector('.modal-title').textContent = 'Adicionar Nova Carta';
+        confirmCardEditBtn.textContent = 'Adicionar';
+        currentCardId = null; 
+        editCardQuestionInput.value = '';
+        editCardAnswerInput.value = '';
+        showModal(editCardModal);
+    }
 
-        if (question && answer && currentStudyDeck) {
+    function openCardModalForEdit(cardId) {
+        const card = cards.find(c => c.id === cardId);
+        if (!card) return;
+        
+        editCardModal.querySelector('.modal-title').textContent = 'Editar Carta';
+        confirmCardEditBtn.textContent = 'Salvar Alterações';
+        currentCardId = cardId;
+        editCardQuestionInput.value = card.question;
+        editCardAnswerInput.value = card.answer;
+        showModal(editCardModal);
+    }
+    
+    function saveCard() {
+        const question = editCardQuestionInput.value.trim();
+        const answer = editCardAnswerInput.value.trim();
+        if (!question || !answer) return alert('Preencha todos os campos!');
+
+        if (currentCardId) { // Editando
+            const card = cards.find(c => c.id === currentCardId);
+            card.question = question;
+            card.answer = answer;
+        } else { // Criando
             cards.push({
-                id: Date.now(),
-                deckId: currentStudyDeck.id,
-                question,
-                answer,
-                repetition: 0,
-                interval: 0,
-                easeFactor: EASE_FACTOR_INITIAL,
-                dueDate: null
+                id: Date.now(), deckId: currentDeckId, question, answer,
+                repetition: 0, interval: 0, easeFactor: EASE_FACTOR_INITIAL, dueDate: null
             });
+        }
+        saveData();
+        hideModal(editCardModal);
+        renderCardManager(currentDeckId);
+    }
+
+    function deleteCard(cardId) {
+        if (confirm('Tem certeza que deseja excluir esta carta?')) {
+            cards = cards.filter(c => c.id !== cardId);
             saveData();
-            newCardQuestionInput.value = '';
-            newCardAnswerInput.value = '';
-            hideModal(newCardModal);
-            
-            // Atualiza a fila de estudo se a carta for adicionada durante uma sessão
-            const newCard = cards[cards.length - 1];
-            studyQueue.push(newCard);
-            loadCard(currentCardIndexInQueue); // Recarrega para atualizar o contador
-            renderDecks();
+            renderCardManager(currentDeckId);
         }
     }
 
@@ -298,24 +317,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================
     navButtons.forEach(btn => btn.addEventListener('click', () => switchView(btn.dataset.view)));
     flashcardContainer.addEventListener('click', flipCard);
-    exitStudyBtn.addEventListener('click', () => {
-        switchView('dashboard-view');
-        renderDecks(); // Atualiza a contagem ao sair
-    });
+    exitStudyBtn.addEventListener('click', () => switchView('dashboard-view'));
+    backToDashboardBtn.addEventListener('click', () => switchView('dashboard-view'));
     
+    deckListContainer.addEventListener('click', (e) => {
+        const studyTarget = e.target.closest('.deck-name-container');
+        const manageTarget = e.target.closest('.manage-deck-btn');
+        if (studyTarget) startStudy(parseInt(studyTarget.dataset.deckId));
+        if (manageTarget) renderCardManager(parseInt(manageTarget.dataset.deckId));
+    });
+
+    cardListContainer.addEventListener('click', (e) => {
+        const editTarget = e.target.closest('.edit-card-btn');
+        const deleteTarget = e.target.closest('.delete-card-btn');
+        if(editTarget) openCardModalForEdit(parseInt(editTarget.dataset.cardId));
+        if(deleteTarget) deleteCard(parseInt(deleteTarget.dataset.cardId));
+    });
+
     answerOptions.addEventListener('click', (e) => {
         const button = e.target.closest('.difficulty-btn');
-        if (button) {
-            handleDifficulty(parseInt(button.dataset.difficulty));
-        }
+        if (button) handleDifficulty(parseInt(button.dataset.difficulty));
     });
 
     // Modais
     newDeckBtn.addEventListener('click', () => showModal(newDeckModal));
     confirmDeckCreationBtn.addEventListener('click', createNewDeck);
-    addCardToDeckBtn.addEventListener('click', () => showModal(newCardModal));
-    confirmCardCreationBtn.addEventListener('click', createNewCard);
-    
+    managerAddCardBtn.addEventListener('click', openCardModalForCreation);
+    confirmCardEditBtn.addEventListener('click', saveCard);
+
     document.body.addEventListener('click', (e) => {
         if (e.target.dataset.action === 'close-modal') {
             hideModal(e.target.closest('.modal-overlay'));
@@ -327,5 +356,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================
     loadData();
     switchView('dashboard-view');
-    renderDecks();
 });
