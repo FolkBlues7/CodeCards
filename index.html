@@ -38,7 +38,11 @@
             </div>
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-xl font-semibold">Cartões no Baralho</h3>
-                <button id="startReviewBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded">Iniciar Revisão</button>
+                <div class="flex items-center space-x-2">
+                    <button id="importTxtBtn" class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded">Importar de TXT</button>
+                    <input type="file" id="fileImporter" class="hidden" accept=".txt">
+                    <button id="startReviewBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded">Iniciar Revisão</button>
+                </div>
             </div>
             <ul id="cardList" class="space-y-2">
                 <div id="cardEmptyState" class="hidden text-center p-6 bg-white rounded-lg shadow">

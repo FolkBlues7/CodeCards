@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
         toast.textContent = message;
         container.appendChild(toast);
 
-        // Força o reflow para a animação funcionar na entrada
         requestAnimationFrame(() => {
             toast.classList.add('show');
         });
@@ -111,9 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (deck.cards.length === 0) {
             emptyState.classList.remove('hidden');
-            return;
+        } else {
+            emptyState.classList.add('hidden');
         }
-        emptyState.classList.add('hidden');
 
         const template = document.getElementById('cardItemTemplate');
         deck.cards.forEach(card => {
@@ -142,13 +141,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!deck) return;
 
         if (editingCardId) {
-            // Atualizando um cartão existente
             const card = deck.cards.find(c => c.id === editingCardId);
             card.front = front;
             card.back = back;
             showToast('Cartão atualizado com sucesso!', 'success');
         } else {
-            // Adicionando um novo cartão
             deck.cards.push({
                 id: crypto.randomUUID(),
                 front,
@@ -199,7 +196,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
+    // --- FUNÇÃO DE IMPORTAÇÃO DE TXT ---
+    const importFromTxt = (file) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const content = event.target.result;
+            const deck = decks.find(d => d.id === currentDeckId);
+            if (!deck) return;
+
+            const cardStrings = content.split('#');
+            let importedCount = 0;
+            const newCards = [];
+
+            cardStrings.forEach(str => {
+                const trimmedStr = str.trim();
+                if (!trimmedStr.startsWith('*')) return;
+
+                const cardData = trimmedStr.substring(1); // Remove o '*'
+                const separatorIndex = cardData.indexOf(':');
+
+                if (separatorIndex === -1) return; // Pula se não houver separador
+
+                const front = cardData.substring(0, separatorIndex).trim();
+                const back = cardData.substring(separatorIndex + 1).trim();
+
+                if (front && back) {
+                    newCards.push({
+                        id: crypto.randomUUID(),
+                        front,
+                        back,
+                        created_at: new Date().toISOString(),
+                        next_review: new Date().toISOString(),
+                        interval: 1,
+                        ease_factor: 2.5,
+                        repetitions: 0
+                    });
+                    importedCount++;
+                }
+            });
+
+            if (importedCount > 0) {
+                deck.cards.push(...newCards);
+                saveDecks();
+                renderCards();
+                showToast(`${importedCount} cartão(ões) importado(s) com sucesso!`, 'success');
+            } else {
+                showToast('Nenhum cartão válido encontrado no arquivo.', 'error');
+            }
+        };
+        reader.readAsText(file);
+    };
+
     // --- FUNÇÕES DE REVISÃO (REVIEW) ---
+    // (O resto das funções de revisão permanecem as mesmas)
     const startReview = () => {
         const deck = decks.find(d => d.id === currentDeckId);
         let dueCards = deck.cards.filter(card => new Date(card.next_review) <= new Date());
@@ -209,7 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        // Aleatoriza a ordem dos cartões
         dueCards = dueCards.sort(() => Math.random() - 0.5);
         reviewedCardsCount = 0;
         
@@ -251,27 +299,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (rating === 'again') {
             card.repetitions = 0;
-            card.interval = 1 / (24 * 60); // 1 minuto
+            const oneMinuteInDays = 1 / (24 * 60);
+            card.next_review = new Date(now.getTime() + oneMinuteInDays * 24 * 60 * 60 * 1000).toISOString();
         } else {
             if (card.repetitions === 0) {
-                card.interval = 1; // 1 dia
+                card.interval = 1;
             } else if (card.repetitions === 1) {
-                card.interval = 6; // 6 dias
+                card.interval = 6;
             } else {
                 card.interval *= card.ease_factor;
             }
 
-            if (rating === 'easy') {
-                card.ease_factor += 0.15;
-            } else if (rating === 'hard') {
-                card.ease_factor = Math.max(1.3, card.ease_factor - 0.2);
-                card.interval = Math.max(1, card.interval * 0.8); // Penalidade para 'difícil'
-            }
+            if (rating === 'easy') card.ease_factor += 0.15;
+            if (rating === 'hard') card.ease_factor = Math.max(1.3, card.ease_factor - 0.2);
+            
             card.repetitions++;
+            card.next_review = new Date(now.getTime() + card.interval * 24 * 60 * 60 * 1000).toISOString();
         }
-        
-        // Intervalo em milissegundos
-        card.next_review = new Date(now.getTime() + card.interval * 24 * 60 * 60 * 1000).toISOString();
         
         saveDecks();
         reviewedCardsCount++;
@@ -321,13 +365,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (action === 'edit') startEditCard(id);
         if (action === 'delete') deleteCard(id);
     });
+
+    // --- Listeners para importação ---
+    const importBtn = document.getElementById('importTxtBtn');
+    const fileImporter = document.getElementById('fileImporter');
+
+    importBtn.addEventListener('click', () => fileImporter.click());
+
+    fileImporter.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            importFromTxt(file);
+        }
+        // Limpa o valor para permitir a importação do mesmo arquivo novamente
+        event.target.value = '';
+    });
     
     document.getElementById('startReviewBtn').addEventListener('click', startReview);
     
     document.getElementById('backToDecksBtn').addEventListener('click', () => {
         currentDeckId = null;
         switchView('deckSection');
-        renderDecks(); // Atualiza as estatísticas
+        renderDecks();
     });
     
     document.getElementById('showAnswerBtn').addEventListener('click', () => {

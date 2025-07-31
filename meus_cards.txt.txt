@@ -1,0 +1,5 @@
+* Qual é a capital do Brasil? : Brasília #
+* Quem descobriu o Brasil? : Pedro Álvares Cabral #
+* Quanto é 2 + 2? : 4 #
+* Isso é uma linha inválida pois não tem asterisco : E será ignorada #
+* Qual o maior planeta do sistema solar? : Júpiter #
