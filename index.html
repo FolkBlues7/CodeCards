@@ -36,9 +36,10 @@
                 <button id="addOrUpdateCardBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full sm:w-auto">Adicionar Cartão</button>
                 <button id="cancelEditBtn" class="hidden bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2">Cancelar Edição</button>
             </div>
-            <div class="flex justify-between items-center mb-2">
+            <div class="flex flex-wrap justify-between items-center mb-2 gap-2">
                 <h3 class="text-xl font-semibold">Cartões no Baralho</h3>
                 <div class="flex items-center space-x-2">
+                    <button id="exportTxtBtn" class="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded">Exportar para TXT</button>
                     <button id="importTxtBtn" class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded">Importar de TXT</button>
                     <input type="file" id="fileImporter" class="hidden" accept=".txt">
                     <button id="startReviewBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded">Iniciar Revisão</button>
@@ -54,14 +55,18 @@
         <div id="reviewSection" class="hidden">
             <h2 class="text-2xl font-semibold mb-4">Revisão</h2>
             <div id="reviewCard" class="bg-white p-6 rounded-lg shadow-lg text-center min-h-[250px] flex flex-col justify-center">
+                <div class="flex justify-around mb-4">
+                    <div class="text-lg">Cartões a Aprender: <span id="learningCount" class="font-bold text-red-500">0</span></div>
+                    <div class="text-lg">Cartões para Revisar: <span id="dueCount" class="font-bold text-blue-500">0</span></div>
+                </div>
                 <p id="cardFront" class="text-2xl mb-4"></p>
                 <p id="cardBack" class="text-xl text-gray-600 hidden"></p>
                 <button id="showAnswerBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-4 self-center">Mostrar Resposta</button>
                 <div id="ratingButtons" class="hidden flex flex-wrap justify-center gap-2">
-                    <button id="rateAgainBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded flex-grow sm:flex-grow-0">Errei (1m)</button>
-                    <button id="rateHardBtn" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded flex-grow sm:flex-grow-0">Difícil</button>
-                    <button id="rateGoodBtn" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded flex-grow sm:flex-grow-0">Bom</button>
-                    <button id="rateEasyBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded flex-grow sm:flex-grow-0">Fácil</button>
+                    <button id="rateAgainBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded flex-grow sm:flex-grow-0">Errei<br><span class="text-xs font-light" data-interval="again"></span></button>
+                    <button id="rateHardBtn" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded flex-grow sm:flex-grow-0">Difícil<br><span class="text-xs font-light" data-interval="hard"></span></button>
+                    <button id="rateGoodBtn" class="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded flex-grow sm:flex-grow-0">Bom<br><span class="text-xs font-light" data-interval="good"></span></button>
+                    <button id="rateEasyBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded flex-grow sm:flex-grow-0">Fácil<br><span class="text-xs font-light" data-interval="easy"></span></button>
                 </div>
             </div>
             <button id="endReviewBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded mt-4">Finalizar Revisão</button>
