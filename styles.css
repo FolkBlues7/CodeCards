@@ -161,10 +161,16 @@ body {
 }
 
 .deck-stats-header {
-    display: flex;
-    width: 15rem;
-    justify-content: space-around;
-    margin-right: 4rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    width: 18rem;
+    margin-right: 1rem;
+}
+
+.deck-stats-header > div {
+    text-align: center;
+    position: relative; /* For tooltip positioning */
 }
 
 .deck-item {
@@ -189,28 +195,75 @@ body {
 }
 
 .deck-stats-container {
-    display: flex;
-    width: 15rem;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    width: 18rem;
     font-size: 1rem;
     font-weight: 600;
 }
 
-.deck-options .btn-icon {
+.deck-stats-container > div {
+    text-align: center;
+}
+
+.deck-options {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: 1rem;
+}
+
+.btn-icon {
     background: none;
     border: none;
-    color: #6b7280;
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    margin-left: 2rem;
+    color: #9ca3af;
+    transition: all 0.2s;
 }
-.deck-options .btn-icon:hover {
+.btn-icon:hover {
     background-color: #e5e7eb;
     color: var(--primary-blue-dark);
 }
+.btn-icon.primary {
+    color: var(--primary-blue);
+}
+.btn-icon.primary:hover {
+    color: #1e40af;
+}
+
+/* Tooltip Styles */
+[data-tooltip] {
+    position: relative;
+    cursor: help;
+}
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    background-color: var(--primary-blue-dark);
+    color: var(--text-light);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+}
+[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
 
 .code-decks-container {
     display: flex;

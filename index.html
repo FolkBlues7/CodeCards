@@ -34,9 +34,9 @@
                     <div class="deck-list-header">
                         <div class="flex-1">Baralhos</div>
                         <div class="deck-stats-header">
-                            <div class="w-1/3 text-center">Novos</div>
-                            <div class="w-1/3 text-center">Aprendendo</div>
-                            <div class="w-1/3 text-center">Revisar</div>
+                            <div data-tooltip="Cartas que você ainda não estudou.">Novos</div>
+                            <div data-tooltip="Cartas em fase de aprendizado inicial.">Aprendendo</div>
+                            <div data-tooltip="Cartas cuja data de revisão chegou.">Revisar</div>
                         </div>
                     </div>
                     <div id="deck-list" class="divide-y divide-gray-200"></div>
@@ -149,6 +149,17 @@
             <div class="modal-actions">
                 <button class="btn btn-secondary" data-action="close-modal">Cancelar</button>
                 <button id="confirm-deck-creation" class="btn btn-primary">Criar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-deck-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 class="modal-title">Editar Nome do Baralho</h3>
+            <input type="text" id="edit-deck-name-input" placeholder="Novo nome do baralho" class="modal-input">
+            <div class="modal-actions">
+                <button class="btn btn-secondary" data-action="close-modal">Cancelar</button>
+                <button id="confirm-deck-edit" class="btn btn-primary">Salvar</button>
             </div>
         </div>
     </div>

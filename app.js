@@ -161,9 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const statsTypeButtons = document.querySelectorAll('.stats-type-btn');
 
     const newDeckModal = document.getElementById('new-deck-modal');
+    const editDeckModal = document.getElementById('edit-deck-modal');
     const editCardModal = document.getElementById('edit-card-modal');
     const newDeckNameInput = document.getElementById('new-deck-name');
     const confirmDeckCreationBtn = document.getElementById('confirm-deck-creation');
+    const editDeckNameInput = document.getElementById('edit-deck-name-input');
+    const confirmDeckEditBtn = document.getElementById('confirm-deck-edit');
     const editCardQuestionInput = document.getElementById('edit-card-question');
     const editCardAnswerInput = document.getElementById('edit-card-answer');
     const confirmCardEditBtn = document.getElementById('confirm-card-edit');
@@ -258,12 +261,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <i class="fa-solid fa-layer-group"></i><span>${deck.name}</span>
                 </div>
                 <div class="deck-stats-container">
-                    <div class="w-1/3 text-center text-blue-600">${newCount}</div>
-                    <div class="w-1/3 text-center text-yellow-600">${learningCount}</div>
-                    <div class="w-1/3 text-center text-red-error">${reviewCount}</div>
+                    <div class="text-blue-600">${newCount}</div>
+                    <div class="text-yellow-600">${learningCount}</div>
+                    <div class="text-red-error">${reviewCount}</div>
                 </div>
                 <div class="deck-options">
-                    <button class="btn-icon manage-deck-btn" data-deck-id="${deck.id}"><i class="fa-solid fa-gear"></i></button>
+                    <button class="btn-icon primary edit-deck-btn" data-deck-id="${deck.id}"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="btn-icon primary delete-deck-btn" data-deck-id="${deck.id}"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn-icon primary manage-deck-btn" data-deck-id="${deck.id}"><i class="fa-solid fa-gear"></i></button>
                 </div>
             `;
             deckListContainer.appendChild(deckElement);
@@ -455,6 +460,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function openEditDeckModal(deckId) {
+        const deck = decks.find(d => d.id === deckId);
+        if (!deck) return;
+        currentDeckId = deckId;
+        editDeckNameInput.value = deck.name;
+        showModal(editDeckModal);
+    }
+
+    function saveDeckName() {
+        const newName = editDeckNameInput.value.trim();
+        if (!newName) return alert("O nome não pode ficar em branco.");
+
+        const deck = decks.find(d => d.id === currentDeckId);
+        if (deck) {
+            deck.name = newName;
+            saveData();
+            hideModal(editDeckModal);
+            renderDecks();
+        }
+    }
+
+    function deleteDeck(deckId) {
+        if (confirm('Tem certeza que deseja excluir este baralho? Todas as suas cartas serão perdidas permanentemente.')) {
+            decks = decks.filter(d => d.id !== deckId);
+            cards = cards.filter(c => c.deckId !== deckId);
+            saveData();
+            renderDecks();
+        }
+    }
+
     function openCardModalForCreation() {
         editCardModal.querySelector('.modal-title').textContent = 'Adicionar Nova Carta';
         confirmCardEditBtn.textContent = 'Adicionar';
@@ -512,8 +547,13 @@ document.addEventListener('DOMContentLoaded', () => {
     deckListContainer.addEventListener('click', (e) => {
         const studyTarget = e.target.closest('.deck-name-container');
         const manageTarget = e.target.closest('.manage-deck-btn');
+        const editTarget = e.target.closest('.edit-deck-btn');
+        const deleteTarget = e.target.closest('.delete-deck-btn');
+
         if (studyTarget) startStudy(parseInt(studyTarget.dataset.deckId), studyTarget.dataset.deckType);
         if (manageTarget) renderCardManager(parseInt(manageTarget.dataset.deckId));
+        if (editTarget) openEditDeckModal(parseInt(editTarget.dataset.deckId));
+        if (deleteTarget) deleteDeck(parseInt(deleteTarget.dataset.deckId));
     });
 
     codeDecksContainer.addEventListener('click', (e) => {
@@ -537,6 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     newDeckBtn.addEventListener('click', () => showModal(newDeckModal));
     confirmDeckCreationBtn.addEventListener('click', createNewDeck);
+    confirmDeckEditBtn.addEventListener('click', saveDeckName);
     managerAddCardBtn.addEventListener('click', openCardModalForCreation);
     confirmCardEditBtn.addEventListener('click', saveCard);
 
