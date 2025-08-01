@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const EASE_FACTOR_INITIAL = 2.5;
+    const ONE_MINUTE_IN_MS = 60 * 1000;
     const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
 
     const codeDecks = [
@@ -131,17 +131,18 @@ document.addEventListener('DOMContentLoaded', () => {
         deck.type = 'code';
         deck.cards.forEach(card => {
             card.deckId = deck.id;
-            card.repetition = 0;
-            card.interval = 0;
-            card.easeFactor = EASE_FACTOR_INITIAL;
             card.dueDate = null;
+            card.interval = 0;
         });
     }));
 
     const views = document.querySelectorAll('.view-container');
     const navButtons = document.querySelectorAll('.nav-button');
     const deckListContainer = document.getElementById('deck-list');
+    const searchInput = document.getElementById('deck-search-input');
     const newDeckBtn = document.getElementById('new-deck-btn');
+    const importDeckBtn = document.getElementById('import-deck-btn');
+    const importFileInput = document.getElementById('import-file-input');
     const exitStudyBtn = document.getElementById('exit-study-btn');
     
     const flashcardContainer = document.getElementById('flashcard-container');
@@ -182,7 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentDeckType = 'custom';
     let currentCardId = null; 
     let studyQueue = [];
-    let currentCardIndexInQueue = 0;
     let isFlipped = false;
 
     function saveData() {
@@ -197,33 +197,27 @@ document.addEventListener('DOMContentLoaded', () => {
         codeCardsProgress = JSON.parse(localStorage.getItem('codecards_code_progress') || '[]');
     }
     
-    function scheduleCard(card, quality) {
-        if (quality < 3) {
-            card.interval = 1;
-            card.repetition = 0;
-        } else {
-            if (card.repetition === 0) card.interval = 1;
-            else if (card.repetition === 1) card.interval = 6;
-            else card.interval = Math.round(card.interval * card.easeFactor);
-            card.repetition += 1;
+    function scheduleCard(card, rating) {
+        const now = Date.now();
+        let nextDueDate;
+
+        switch (rating) {
+            case 1: nextDueDate = now + ONE_MINUTE_IN_MS; break;
+            case 2: nextDueDate = now + 3 * ONE_MINUTE_IN_MS; break;
+            case 3: nextDueDate = now + 30 * ONE_MINUTE_IN_MS; break;
+            case 4: nextDueDate = now + ONE_DAY_IN_MS; break;
         }
-
-        card.easeFactor = card.easeFactor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
-        if (card.easeFactor < 1.3) card.easeFactor = 1.3;
-
-        const now = new Date();
-        now.setHours(0, 0, 0, 0);
-        card.dueDate = now.getTime() + card.interval * ONE_DAY_IN_MS;
+        card.dueDate = nextDueDate;
         
         if (currentDeckType === 'custom') {
             const cardToUpdate = cards.find(c => c.id === card.id);
-            Object.assign(cardToUpdate, card);
+            if(cardToUpdate) Object.assign(cardToUpdate, { dueDate: card.dueDate });
         } else {
             const progress = codeCardsProgress.find(p => p.id === card.id);
             if (progress) {
-                Object.assign(progress, card);
+                Object.assign(progress, { dueDate: card.dueDate });
             } else {
-                codeCardsProgress.push(card);
+                codeCardsProgress.push({ id: card.id, dueDate: card.dueDate });
             }
         }
         saveData();
@@ -244,15 +238,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (viewId === 'code-decks-view') renderCodeDecks();
     }
 
-    function renderDecks() {
+    function renderDecks(filter = '') {
         deckListContainer.innerHTML = '';
         const todayTimestamp = new Date().setHours(0, 0, 0, 0);
+        const filteredDecks = decks.filter(deck => deck.name.toLowerCase().includes(filter.toLowerCase()));
 
-        decks.forEach(deck => {
+        filteredDecks.forEach(deck => {
             const deckCards = cards.filter(c => c.deckId === deck.id);
             const newCount = deckCards.filter(c => !c.dueDate).length;
-            const learningCount = deckCards.filter(c => c.dueDate && c.interval < 21).length;
-            const reviewCount = deckCards.filter(c => c.dueDate && c.dueDate <= todayTimestamp).length;
+            const learningCount = deckCards.filter(c => c.dueDate && c.dueDate > Date.now() && c.dueDate < Date.now() + ONE_DAY_IN_MS).length;
+            const reviewCount = deckCards.filter(c => c.dueDate && c.dueDate <= Date.now()).length;
 
             const deckElement = document.createElement('div');
             deckElement.className = 'deck-item';
@@ -266,9 +261,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="text-red-error">${reviewCount}</div>
                 </div>
                 <div class="deck-options">
-                    <button class="btn-icon primary edit-deck-btn" data-deck-id="${deck.id}"><i class="fa-solid fa-pencil"></i></button>
-                    <button class="btn-icon primary delete-deck-btn" data-deck-id="${deck.id}"><i class="fa-solid fa-trash"></i></button>
-                    <button class="btn-icon primary manage-deck-btn" data-deck-id="${deck.id}"><i class="fa-solid fa-gear"></i></button>
+                    <button class="btn-icon primary export-deck-btn" data-deck-id="${deck.id}" title="Exportar Baralho"><i class="fa-solid fa-download"></i></button>
+                    <button class="btn-icon primary edit-deck-btn" data-deck-id="${deck.id}" title="Editar Nome"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="btn-icon primary delete-deck-btn" data-deck-id="${deck.id}" title="Excluir Baralho"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn-icon primary manage-deck-btn" data-deck-id="${deck.id}" title="Gerenciar Cartas"><i class="fa-solid fa-gear"></i></button>
                 </div>
             `;
             deckListContainer.appendChild(deckElement);
@@ -345,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function startStudy(deckId, deckType) {
         currentDeckId = deckId;
         currentDeckType = deckType;
-        const todayTimestamp = new Date().setHours(0, 0, 0, 0);
+        const now = Date.now();
 
         let cardsForDeck;
         if (deckType === 'custom') {
@@ -355,26 +351,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const deck = lang.decks.find(d => d.id === deckId);
             cardsForDeck = deck.cards.map(originalCard => {
                 const progress = codeCardsProgress.find(p => p.id === originalCard.id);
-                return progress ? {...progress} : {...originalCard};
+                return progress ? {...originalCard, ...progress} : {...originalCard};
             });
         }
 
-        const dueCards = cardsForDeck.filter(c => c.dueDate && c.dueDate <= todayTimestamp);
+        const dueCards = cardsForDeck.filter(c => c.dueDate && c.dueDate <= now);
         const newCards = cardsForDeck.filter(c => !c.dueDate).slice(0, 10);
 
-        studyQueue = [...dueCards, ...newCards];
+        studyQueue = [...dueCards, ...newCards].sort((a, b) => (a.dueDate || 0) - (b.dueDate || 0));
+        
         if (studyQueue.length === 0) {
             alert("Nenhum cartão para estudar neste baralho hoje!");
             return;
         }
         
-        currentCardIndexInQueue = 0;
         switchView('study-view');
-        loadCard(currentCardIndexInQueue);
+        loadCard();
     }
 
-    function loadCard(index) {
-        if (index >= studyQueue.length) {
+    function loadCard() {
+        if (studyQueue.length === 0) {
             flashcardFront.textContent = 'Parabéns, você concluiu a sessão!';
             flashcardBack.textContent = 'Bom trabalho!';
             answerOptions.classList.add('hidden');
@@ -383,10 +379,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        const card = studyQueue[index];
+        const card = studyQueue[0];
         flashcardFront.textContent = card.question;
         flashcardBack.textContent = card.answer;
-        cardCounter.textContent = `${index + 1}/${studyQueue.length} cartas`;
+        cardCounter.textContent = `${studyQueue.length} cartas restantes`;
         
         if(isFlipped) flipCard();
         answerOptions.classList.add('hidden');
@@ -395,23 +391,23 @@ document.addEventListener('DOMContentLoaded', () => {
     function flipCard() {
         isFlipped = !isFlipped;
         flashcard.classList.toggle('is-flipped');
-        if (isFlipped && currentCardIndexInQueue < studyQueue.length) {
+        if (isFlipped && studyQueue.length > 0) {
             answerOptions.classList.remove('hidden');
         } else {
             answerOptions.classList.add('hidden');
         }
     }
 
-    function handleDifficulty(quality) {
-        if (quality === 3) {
-            currentCardIndexInQueue++;
-            setTimeout(() => loadCard(currentCardIndexInQueue), 300);
-            return;
+    function handleDifficulty(rating) {
+        const card = studyQueue.shift();
+        scheduleCard(card, rating);
+        
+        if (card.dueDate <= Date.now() + 30 * ONE_MINUTE_IN_MS) {
+            studyQueue.push(card);
+            studyQueue.sort((a, b) => (a.dueDate || 0) - (b.dueDate || 0));
         }
-        const card = studyQueue[currentCardIndexInQueue];
-        scheduleCard(card, quality);
-        currentCardIndexInQueue++;
-        setTimeout(() => loadCard(currentCardIndexInQueue), 300);
+        
+        setTimeout(() => loadCard(), 300);
     }
 
     function renderStatistics(type) {
@@ -436,8 +432,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const newCount = sourceCards.filter(c => !c.dueDate).length;
-        const learningCount = sourceCards.filter(c => c.dueDate && c.interval < 21).length;
-        const matureCount = sourceCards.filter(c => c.dueDate && c.interval >= 21).length;
+        const learningCount = sourceCards.filter(c => c.dueDate && c.dueDate < Date.now() + ONE_DAY_IN_MS).length;
+        const matureCount = sourceCards.filter(c => c.dueDate && c.dueDate >= Date.now() + ONE_DAY_IN_MS).length;
         
         if (cardDistributionChart) cardDistributionChart.destroy();
         cardDistributionChart = new Chart(cardDistributionChartCtx, {
@@ -490,6 +486,75 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function exportDeck(deckId) {
+        const deck = decks.find(d => d.id === deckId);
+        if(!deck) return;
+
+        const deckCards = cards.filter(c => c.deckId === deckId).map(({ question, answer }) => ({ question, answer }));
+        
+        const exportData = {
+            format: "CodeCards-Deck-v1",
+            deck: { name: deck.name },
+            cards: deckCards
+        };
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", `${deck.name}.ccdeck`);
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+        alert(`Baralho "${deck.name}" exportado com sucesso!`);
+    }
+
+    function handleFileImport(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (data.format !== "CodeCards-Deck-v1" || !data.deck || !Array.isArray(data.cards)) {
+                    throw new Error("Formato de arquivo inválido ou corrompido.");
+                }
+
+                const newDeckName = data.deck.name || "Baralho Importado";
+                const existingNames = decks.map(d => d.name);
+                let finalName = newDeckName;
+                let counter = 1;
+                while(existingNames.includes(finalName)) {
+                    finalName = `${newDeckName} (${counter++})`;
+                }
+
+                const newDeck = { id: Date.now(), name: finalName };
+                decks.push(newDeck);
+
+                data.cards.forEach(cardData => {
+                    if (cardData.question && cardData.answer) {
+                        cards.push({
+                            id: Date.now() + Math.random(),
+                            deckId: newDeck.id,
+                            question: String(cardData.question),
+                            answer: String(cardData.answer),
+                            dueDate: null,
+                            interval: 0
+                        });
+                    }
+                });
+                saveData();
+                renderDecks();
+                alert(`Baralho "${finalName}" importado com sucesso!`);
+            } catch (error) {
+                alert(`Falha ao importar o arquivo: ${error.message}`);
+            } finally {
+                importFileInput.value = '';
+            }
+        };
+        reader.readAsText(file);
+    }
+
     function openCardModalForCreation() {
         editCardModal.querySelector('.modal-title').textContent = 'Adicionar Nova Carta';
         confirmCardEditBtn.textContent = 'Adicionar';
@@ -523,7 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             cards.push({
                 id: Date.now(), deckId: currentDeckId, question, answer,
-                repetition: 0, interval: 0, easeFactor: EASE_FACTOR_INITIAL, dueDate: null
+                dueDate: null, interval: 0
             });
         }
         saveData();
@@ -549,11 +614,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const manageTarget = e.target.closest('.manage-deck-btn');
         const editTarget = e.target.closest('.edit-deck-btn');
         const deleteTarget = e.target.closest('.delete-deck-btn');
+        const exportTarget = e.target.closest('.export-deck-btn');
 
         if (studyTarget) startStudy(parseInt(studyTarget.dataset.deckId), studyTarget.dataset.deckType);
         if (manageTarget) renderCardManager(parseInt(manageTarget.dataset.deckId));
         if (editTarget) openEditDeckModal(parseInt(editTarget.dataset.deckId));
         if (deleteTarget) deleteDeck(parseInt(deleteTarget.dataset.deckId));
+        if (exportTarget) exportDeck(parseInt(exportTarget.dataset.deckId));
+    });
+
+    searchInput.addEventListener('input', (e) => {
+        renderDecks(e.target.value);
     });
 
     codeDecksContainer.addEventListener('click', (e) => {
@@ -570,12 +641,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     answerOptions.addEventListener('click', (e) => {
         const button = e.target.closest('.difficulty-btn');
-        if (button) handleDifficulty(parseInt(button.dataset.difficulty));
+        if (button) handleDifficulty(parseInt(button.dataset.rating));
     });
 
     statsTypeButtons.forEach(btn => btn.addEventListener('click', () => renderStatistics(btn.dataset.type)));
 
     newDeckBtn.addEventListener('click', () => showModal(newDeckModal));
+    importDeckBtn.addEventListener('click', () => importFileInput.click());
+    importFileInput.addEventListener('change', handleFileImport);
     confirmDeckCreationBtn.addEventListener('click', createNewDeck);
     confirmDeckEditBtn.addEventListener('click', saveDeckName);
     managerAddCardBtn.addEventListener('click', openCardModalForCreation);
