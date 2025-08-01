@@ -497,6 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navButtons = document.querySelectorAll('.nav-button');
     const deckListContainer = document.getElementById('deck-list');
     const searchInput = document.getElementById('deck-search-input');
+    const codeDeckSearchInput = document.getElementById('code-deck-search-input');
     const newDeckBtn = document.getElementById('new-deck-btn');
     const importDeckBtn = document.getElementById('import-deck-btn');
     const importFileInput = document.getElementById('import-file-input');
@@ -541,6 +542,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentCardId = null; 
     let studyQueue = [];
     let isFlipped = false;
+    let activeCodeCategory = 'Back-end';
+
+    function sanitizeHTML(str) {
+        return str.replace(/[&<>"']/g, function(m) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            }[m];
+        });
+    }
 
     function saveData() {
         localStorage.setItem('codecards_decks', JSON.stringify(decks));
@@ -592,7 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (viewId === 'stats-view') renderStatistics('custom');
         if (viewId === 'dashboard-view') renderDecks();
-        if (viewId === 'code-decks-view') renderCodeDecks('Back-end');
+        if (viewId === 'code-decks-view') renderCodeDecks(activeCodeCategory);
     }
 
     function renderDecks(filter = '') {
@@ -610,7 +624,7 @@ document.addEventListener('DOMContentLoaded', () => {
             deckElement.className = 'deck-item';
             deckElement.innerHTML = `
                 <div class="deck-name-container" data-deck-id="${deck.id}" data-deck-type="custom">
-                    <i class="fa-solid fa-layer-group"></i><span>${deck.name}</span>
+                    <i class="fa-solid fa-layer-group"></i><span>${sanitizeHTML(deck.name)}</span>
                 </div>
                 <div class="deck-stats-container">
                     <div class="text-blue-600">${newCount}</div>
@@ -628,14 +642,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function renderCodeDecks(category) {
+    function renderCodeDecks(category, filter = '') {
+        activeCodeCategory = category;
         codeDecksContainer.innerHTML = '';
         const categoryTabs = document.querySelector('.code-category-tabs');
         categoryTabs.querySelectorAll('button').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.category === category);
         });
 
-        const filteredLanguages = codeDecks.filter(lang => lang.category === category);
+        const filteredLanguages = codeDecks.filter(lang => 
+            lang.category === category && lang.language.toLowerCase().includes(filter.toLowerCase())
+        );
 
         filteredLanguages.forEach(lang => {
             const langSection = document.createElement('div');
@@ -844,7 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function hideModal(modal) { modal.classList.add('hidden'); }
 
     function createNewDeck() {
-        const name = newDeckNameInput.value.trim();
+        const name = sanitizeHTML(newDeckNameInput.value.trim());
         if (name) {
             decks.push({ id: Date.now(), name });
             saveData();
@@ -863,7 +880,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveDeckName() {
-        const newName = editDeckNameInput.value.trim();
+        const newName = sanitizeHTML(editDeckNameInput.value.trim());
         if (!newName) return alert("O nome não pode ficar em branco.");
 
         const deck = decks.find(d => d.id === currentDeckId);
@@ -918,7 +935,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error("Formato de arquivo inválido ou corrompido.");
                 }
 
-                const newDeckName = data.deck.name || "Baralho Importado";
+                const newDeckName = sanitizeHTML(data.deck.name || "Baralho Importado");
                 const existingNames = decks.map(d => d.name);
                 let finalName = newDeckName;
                 let counter = 1;
@@ -934,8 +951,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         cards.push({
                             id: Date.now() + Math.random(),
                             deckId: newDeck.id,
-                            question: String(cardData.question),
-                            answer: String(cardData.answer),
+                            question: sanitizeHTML(String(cardData.question)),
+                            answer: sanitizeHTML(String(cardData.answer)),
                             dueDate: null,
                             interval: 0
                         });
@@ -975,8 +992,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function saveCard() {
-        const question = editCardQuestionInput.value.trim();
-        const answer = editCardAnswerInput.value.trim();
+        const question = sanitizeHTML(editCardQuestionInput.value.trim());
+        const answer = sanitizeHTML(editCardAnswerInput.value.trim());
         if (!question || !answer) return alert('Preencha todos os campos!');
 
         if (currentCardId) {
@@ -1025,6 +1042,10 @@ document.addEventListener('DOMContentLoaded', () => {
         renderDecks(e.target.value);
     });
 
+    codeDeckSearchInput.addEventListener('input', (e) => {
+        renderCodeDecks(activeCodeCategory, e.target.value);
+    });
+
     codeDecksContainer.addEventListener('click', (e) => {
         const studyTarget = e.target.closest('.code-deck-card');
         if (studyTarget) {
@@ -1049,7 +1070,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('code-decks-view').addEventListener('click', (e) => {
         const categoryTarget = e.target.closest('.code-category-btn');
         if (categoryTarget) {
-            renderCodeDecks(categoryTarget.dataset.category);
+            renderCodeDecks(categoryTarget.dataset.category, codeDeckSearchInput.value);
         }
     });
 
