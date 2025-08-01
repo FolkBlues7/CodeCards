@@ -129,50 +129,262 @@ document.addEventListener('DOMContentLoaded', () => {
                     { id: 'py_c_30', question: 'O que é "duck typing"?', answer: '"Se anda como um pato e grasna como um pato, então deve ser um pato." O tipo de um objeto não importa, apenas se ele possui os métodos e propriedades necessários.' },
                 ]}
             ],
-            frameworks: []
+            frameworks: [
+                {
+                    name: 'Django',
+                    decks: [
+                        { id: 'dj_b_1', name: 'Projetos, Apps e Models', difficulty: 'Iniciante', cards: [
+                            { id: 'dj_c_1', question: 'O que é Django?', answer: 'Um framework web Python de alto nível que incentiva o desenvolvimento rápido e o design limpo e pragmático.' },
+                            { id: 'dj_c_2', question: 'Qual o comando para iniciar um novo projeto Django?', answer: '`django-admin startproject nome_do_projeto`' },
+                            { id: 'dj_c_3', question: 'O que é um "app" em Django?', answer: 'Um módulo autocontido que lida com uma funcionalidade específica da aplicação (ex: um blog, uma enquete).' },
+                            { id: 'dj_c_4', question: 'Qual o comando para criar um novo app?', answer: '`python manage.py startapp nome_do_app`' },
+                            { id: 'dj_c_5', question: 'O que é um "Model"?', answer: 'A fonte única e definitiva de informação sobre seus dados. Contém os campos e comportamentos essenciais dos dados que você está armazenando.' },
+                            { id: 'dj_c_6', question: 'O que é o ORM do Django?', answer: 'Object-Relational Mapper. Permite interagir com o banco de dados usando código Python em vez de SQL.' },
+                            { id: 'dj_c_7', question: 'O que os comandos `makemigrations` e `migrate` fazem?', answer: '`makemigrations` cria arquivos de migração baseados nas mudanças dos models. `migrate` aplica essas migrações ao banco de dados.' },
+                            { id: 'dj_c_8', question: 'O que é o Django Admin?', answer: 'Uma interface administrativa pronta para uso, gerada automaticamente a partir dos seus models.' },
+                            { id: 'dj_c_9', question: 'Como se registra um model no Django Admin?', answer: 'Em `admin.py`, importe o model e use `admin.site.register(MeuModel)`.' },
+                            { id: 'dj_c_10', question: 'O que é uma "View"?', answer: 'Uma função ou classe que recebe uma requisição web e retorna uma resposta web.' },
+                        ]},
+                        { id: 'dj_i_1', name: 'Views, Templates e Forms', difficulty: 'Intermediário', cards: [
+                            { id: 'dj_c_11', question: 'Qual a diferença entre "Function-Based Views" e "Class-Based Views"?', answer: 'FBVs são simples funções Python. CBVs permitem estruturar as views e reutilizar código usando herança.' },
+                            { id: 'dj_c_12', question: 'O que é o "Django Template Language" (DTL)?', answer: 'A linguagem de marcação usada para embutir lógica e variáveis nos templates HTML.' },
+                            { id: 'dj_c_13', question: 'Como se passa dados (contexto) de uma view para um template?', answer: 'Retornando `render(request, "template.html", {"chave": valor})`.' },
+                            { id: 'dj_c_14', question: 'O que são "template tags"?', answer: 'Tags que fornecem lógica na renderização de templates. Ex: `{% if %}`, `{% for %}`.' },
+                            { id: 'dj_c_15', question: 'O que são "template filters"?', answer: 'Modificam a exibição de variáveis no template. Ex: `{{ variavel|upper }}`.' },
+                            { id: 'dj_c_16', question: 'O que é o arquivo `urls.py`?', answer: 'Define o roteamento de URLs para as views correspondentes.' },
+                            { id: 'dj_c_17', question: 'O que é um "Form" em Django?', answer: 'Uma classe que representa um formulário HTML, lida com a validação de dados e renderiza os campos.' },
+                            { id: 'dj_c_18', question: 'O que é um `ModelForm`?', answer: 'Uma classe auxiliar que permite criar um Form a partir de uma classe Model do Django, sem precisar redefinir os campos.' },
+                            { id: 'dj_c_19', question: 'O que é o CSRF (Cross-Site Request Forgery) e como o Django protege contra ele?', answer: 'Um tipo de ataque. Django protege usando um token secreto (`{% csrf_token %}`) em formulários POST.' },
+                            { id: 'dj_c_20', question: 'O que é o QuerySet API?', answer: 'A API que permite criar, filtrar, ordenar e deletar objetos do banco de dados de forma encadeada. Ex: `Model.objects.filter(..).order_by(..)`.' },
+                        ]},
+                        { id: 'dj_a_1', name: 'Tópicos Avançados', difficulty: 'Avançado', cards: [
+                            { id: 'dj_c_21', question: 'O que é o Django REST Framework (DRF)?', answer: 'Uma biblioteca poderosa e flexível para construir Web APIs em Django.' },
+                            { id: 'dj_c_22', question: 'O que é um "Serializer" no DRF?', answer: 'Converte tipos de dados complexos, como querysets e instâncias de models, em tipos nativos do Python que podem ser facilmente renderizados em JSON, XML ou outros tipos de conteúdo.' },
+                            { id: 'dj_c_23', question: 'O que são "Signals" em Django?', answer: 'Permitem que certas aplicações recebam notificações quando ações ocorrem em outras partes do framework (ex: antes ou depois de um model ser salvo).' },
+                            { id: 'dj_c_24', question: 'O que é "Middleware"?', answer: 'Um framework de hooks no processamento de requisições/respostas do Django. É um sistema de baixo nível para alterar globalmente a entrada e saída do Django.' },
+                            { id: 'dj_c_25', question: 'Para que serve o sistema de cache do Django?', answer: 'Para salvar o resultado de operações caras para que não precisem ser recalculadas a cada requisição, melhorando a performance.' },
+                            { id: 'dj_c_26', question: 'O que são "managers" de models customizados?', answer: 'Permitem adicionar métodos extras a um `Model.objects` ou modificar o queryset inicial que ele retorna.' },
+                            { id: 'dj_c_27', question: 'O que é "lazy evaluation" em QuerySets?', answer: 'A criação de um QuerySet não envolve nenhuma atividade de banco de dados. A consulta só é executada quando o QuerySet é avaliado (ex: iterando sobre ele).' },
+                            { id: 'dj_c_28', question: 'Para que serve o método `.select_related()`?', answer: 'Para otimizar consultas, seguindo relacionamentos de chave estrangeira e selecionando dados de objetos relacionados em uma única consulta SQL, evitando múltiplas queries.' },
+                            { id: 'dj_c_29', question: 'Para que serve o método `.prefetch_related()`?', answer: 'Similar ao `select_related`, mas funciona para relacionamentos muitos-para-muitos e muitos-para-um, fazendo uma consulta separada para cada relacionamento e juntando os dados em Python.' },
+                            { id: 'dj_c_30', question: 'O que são "Generic Class-Based Views"?', answer: 'Classes de view pré-construídas que lidam com padrões comuns, como exibir uma lista de objetos ou uma página de detalhes, reduzindo o código boilerplate.' },
+                        ]}
+                    ]
+                }
+            ]
         },
         {
-            language: 'C',
+            language: 'C++',
             category: 'Back-end',
             decks: [
-                { id: 'c_b_1', name: 'Fundamentos da Linguagem C', difficulty: 'Iniciante', cards: [
-                    { id: 'c_c_1', question: 'Qual a função principal que inicia a execução de um programa em C?', answer: 'A função `main()`.' },
-                    { id: 'c_c_2', question: 'Como se declara uma variável inteira em C?', answer: '`int nome_da_variavel;`' },
-                    { id: 'c_c_3', question: 'Para que serve a diretiva `#include <stdio.h>`?', answer: 'Para incluir a biblioteca padrão de entrada e saída (Standard Input/Output), que contém funções como `printf` e `scanf`.' },
-                    { id: 'c_c_4', question: 'Qual a função utilizada para imprimir texto no console?', answer: '`printf()`.' },
-                    { id: 'c_c_5', question: 'O que é um ponteiro?', answer: 'Uma variável que armazena o endereço de memória de outra variável.' },
-                    { id: 'c_c_6', question: 'Como se obtém o endereço de memória de uma variável?', answer: 'Usando o operador `&` (endereço de).' },
-                    { id: 'c_c_7', question: 'O que o operador `*` faz quando usado com um ponteiro?', answer: 'Acessa o valor armazenado no endereço de memória para o qual o ponteiro aponta (dereferenciação).' },
-                    { id: 'c_c_8', question: 'Para que serve a estrutura de controle `if-else`?', answer: 'Para executar blocos de código condicionalmente, com base em uma expressão booleana.' },
-                    { id: 'c_c_9', question: 'Qual a diferença entre os loops `while` e `do-while`?', answer: '`while` testa a condição antes de executar o bloco. `do-while` executa o bloco pelo menos uma vez e depois testa a condição.' },
-                    { id: 'c_c_10', question: 'Como se define uma constante em C?', answer: 'Usando a diretiva `#define` ou a palavra-chave `const`.' },
+                { id: 'cpp_b_1', name: 'Fundamentos do C++', difficulty: 'Iniciante', cards: [
+                    { id: 'cpp_c_1', question: 'Qual a principal diferença entre C e C++?', answer: 'C++ suporta programação orientada a objetos (classes, herança, etc.), enquanto C é puramente procedural.' },
+                    { id: 'cpp_c_2', question: 'O que é a `iostream`?', answer: 'A biblioteca padrão de C++ para operações de entrada e saída (Input/Output Stream), como `cin` e `cout`.' },
+                    { id: 'cpp_c_3', question: 'Qual a diferença entre `cout` e `printf`?', answer: '`cout` é um objeto de stream type-safe de C++. `printf` é uma função de C que usa strings de formatação e não é type-safe.' },
+                    { id: 'cpp_c_4', question: 'O que é um "namespace"?', answer: 'Um escopo declarativo que fornece uma maneira de agrupar nomes relacionados e evitar colisões de nomes. Ex: `std`.' },
+                    { id: 'cpp_c_5', question: 'Como se declara uma referência em C++?', answer: 'Usando o operador `&` na declaração. Ex: `int &ref = variavel;`. Uma referência é um alias para uma variável existente.' },
+                    { id: 'cpp_c_6', question: 'O que é uma classe?', answer: 'Um modelo para criar objetos. Agrupa dados (atributos) e funções (métodos) em uma única unidade.' },
+                    { id: 'cpp_c_7', question: 'Qual a diferença entre `struct` e `class` em C++?', answer: 'A única diferença é a visibilidade padrão: os membros de uma `struct` são `public` por padrão, enquanto os de uma `class` são `private`.' },
+                    { id: 'cpp_c_8', question: 'O que a palavra-chave `new` faz?', answer: 'Aloca memória para um objeto no "heap" e retorna um ponteiro para essa memória.' },
+                    { id: 'cpp_c_9', question: 'O que a palavra-chave `delete` faz?', answer: 'Libera a memória alocada com `new`, chamando o destrutor do objeto.' },
+                    { id: 'cpp_c_10', question: 'O que é o `string` da STL?', answer: 'A classe `std::string` é a forma padrão de C++ para manipular sequências de caracteres, mais segura e flexível que os arrays de char de C.' },
                 ]},
-                { id: 'c_i_1', name: 'Estruturas de Dados e Funções', difficulty: 'Intermediário', cards: [
-                    { id: 'c_c_11', question: 'O que é uma `struct` em C?', answer: 'Um tipo de dado complexo que agrupa variáveis de diferentes tipos sob um único nome.' },
-                    { id: 'c_c_12', question: 'Qual a diferença entre um `array` e uma `struct`?', answer: 'Um array armazena múltiplos valores do mesmo tipo. Uma struct pode armazenar múltiplos valores de tipos diferentes.' },
-                    { id: 'c_c_13', question: 'O que a função `malloc()` faz?', answer: 'Aloca um bloco de memória de um tamanho especificado em bytes e retorna um ponteiro para o início do bloco.' },
-                    { id: 'c_c_14', question: 'Por que é importante usar `free()` após `malloc()`?', answer: 'Para liberar a memória alocada dinamicamente, evitando vazamentos de memória (memory leaks).' },
-                    { id: 'c_c_15', question: 'O que significa "passagem por valor" em uma função?', answer: 'Significa que uma cópia do valor do argumento é passada para a função. Alterações no parâmetro dentro da função não afetam a variável original.' },
-                    { id: 'c_c_16', question: 'O que significa "passagem por referência" em C?', answer: 'É simulada passando um ponteiro (o endereço da variável) para a função. Isso permite que a função modifique a variável original.' },
-                    { id: 'c_c_17', question: 'O que é uma `union`?', answer: 'Similar a uma `struct`, mas todos os seus membros compartilham o mesmo local de memória. Apenas um membro pode ser usado por vez.' },
-                    { id: 'c_c_18', question: 'Para que serve a palavra-chave `typedef`?', answer: 'Para criar um novo nome (um alias) para um tipo de dado existente.' },
-                    { id: 'c_c_19', question: 'O que são arquivos de cabeçalho (`.h`)?', answer: 'Arquivos que contêm declarações de funções, tipos e macros para serem compartilhados entre diferentes arquivos de código fonte (`.c`).' },
-                    { id: 'c_c_20', question: 'Qual a diferença entre `char *str` e `char str[]` na declaração de uma string?', answer: '`char *str` cria um ponteiro para um literal de string (geralmente em memória somente leitura). `char str[]` cria um array de caracteres que pode ser modificado.' },
+                { id: 'cpp_i_1', name: 'Orientação a Objetos e STL', difficulty: 'Intermediário', cards: [
+                    { id: 'cpp_c_11', question: 'O que é um construtor de cópia (copy constructor)?', answer: 'Um construtor que cria um objeto inicializando-o com outro objeto do mesmo tipo, que foi passado como argumento.' },
+                    { id: 'cpp_c_12', question: 'O que é um destrutor?', answer: 'Um método de classe especial que é chamado automaticamente quando um objeto sai do escopo ou é explicitamente deletado.' },
+                    { id: 'cpp_c_13', question: 'O que é a "Regra dos Três" (Rule of Three)?', answer: 'Uma regra de ouro que diz que se uma classe precisa de um destrutor, um construtor de cópia ou um operador de atribuição de cópia, ela provavelmente precisa dos três.' },
+                    { id: 'cpp_c_14', question: 'O que é herança múltipla?', answer: 'A capacidade de uma classe derivar de mais de uma classe base, herdando os membros de todas elas.' },
+                    { id: 'cpp_c_15', question: 'O que é uma função virtual?', answer: 'Uma função membro que você espera que seja redefinida em classes derivadas. Permite o polimorfismo em tempo de execução.' },
+                    { id: 'cpp_c_16', question: 'O que é uma classe abstrata em C++?', answer: 'Uma classe que tem pelo menos uma função virtual pura (declarada com `= 0;`). Não pode ser instanciada diretamente.' },
+                    { id: 'cpp_c_17', question: 'O que é a STL (Standard Template Library)?', answer: 'Uma biblioteca de software que faz parte da Biblioteca Padrão do C++, fornecendo contêineres, algoritmos e iteradores.' },
+                    { id: 'cpp_c_18', question: 'O que é um `std::vector`?', answer: 'Um contêiner da STL que implementa um array de tamanho dinâmico.' },
+                    { id: 'cpp_c_19', question: 'O que é um `std::map`?', answer: 'Um contêiner associativo da STL que armazena elementos formados por uma combinação de uma chave e um valor mapeado, ordenados pela chave.' },
+                    { id: 'cpp_c_20', question: 'O que são "templates" em C++?', answer: 'Um recurso que permite que funções e classes operem com tipos genéricos, permitindo escrever código que funciona para múltiplos tipos sem ser reescrito.' },
                 ]},
-                { id: 'c_a_1', name: 'Gerenciamento de Memória e Tópicos Avançados', difficulty: 'Avançado', cards: [
-                    { id: 'c_c_21', question: 'O que é um ponteiro para função?', answer: 'Uma variável que armazena o endereço de uma função. Permite que funções sejam passadas como argumentos ou retornadas de outras funções.' },
-                    { id: 'c_c_22', question: 'Para que serve a função `realloc()`?', answer: 'Para redimensionar um bloco de memória previamente alocado por `malloc` ou `calloc`.' },
-                    { id: 'c_c_23', question: 'O que são "bitfields" em uma `struct`?', answer: 'Permitem especificar o número de bits que um membro de uma struct deve ocupar, útil para economizar memória.' },
-                    { id: 'c_c_24', question: 'O que a palavra-chave `volatile` indica ao compilador?', answer: 'Que o valor de uma variável pode ser alterado por algo fora do controle do programa (ex: hardware), e o compilador não deve aplicar otimizações que assumam que o valor é constante.' },
-                    { id: 'c_c_25', question: 'Qual a diferença entre o pré-processador, o compilador e o linker?', answer: 'Pré-processador trata diretivas (`#include`, `#define`). Compilador traduz o código C para código de máquina. Linker combina o código de máquina com bibliotecas para criar um executável.' },
-                    { id: 'c_c_26', question: 'O que é um "dangling pointer" (ponteiro pendurado)?', answer: 'Um ponteiro que aponta para um local de memória que foi liberado (`free`). Acessá-lo causa comportamento indefinido.' },
-                    { id: 'c_c_27', question: 'Para que serve a palavra-chave `static` em uma variável local?', answer: 'Faz com que a variável mantenha seu valor entre as chamadas da função. Ela é inicializada apenas uma vez.' },
-                    { id: 'c_c_28', question: 'Para que serve a palavra-chave `static` em uma função ou variável global?', answer: 'Restringe a visibilidade da função ou variável ao arquivo onde foi declarada (escopo de arquivo).' },
-                    { id: 'c_c_29', question: 'O que é recursão?', answer: 'O processo no qual uma função chama a si mesma, direta ou indiretamente. Requer uma condição de parada para evitar um loop infinito.' },
-                    { id: 'c_c_30', question: 'O que é o "stack" e o "heap" na memória de um programa C?', answer: 'O "stack" é usado para variáveis locais e chamadas de função (gerenciamento automático). O "heap" é usado para alocação dinâmica de memória (`malloc`), que deve ser gerenciada manualmente.' },
+                { id: 'cpp_a_1', name: 'Tópicos Avançados do C++ Moderno', difficulty: 'Avançado', cards: [
+                    { id: 'cpp_c_21', question: 'O que são "smart pointers" (ponteiros inteligentes)?', answer: 'Objetos que agem como ponteiros, mas fornecem gerenciamento de memória automático. Ex: `std::unique_ptr`, `std::shared_ptr`.' },
+                    { id: 'cpp_c_22', question: 'Qual a diferença entre `std::unique_ptr` e `std::shared_ptr`?', answer: '`unique_ptr` possui posse exclusiva do objeto. `shared_ptr` permite múltiplos ponteiros compartilharem a posse, usando contagem de referência.' },
+                    { id: 'cpp_c_23', question: 'O que é "RAII" (Resource Acquisition Is Initialization)?', answer: 'Um princípio de design que vincula o ciclo de vida de um recurso (memória, arquivo, etc.) ao ciclo de vida de um objeto. O recurso é adquirido no construtor e liberado no destrutor.' },
+                    { id: 'cpp_c_24', question: 'O que são "rvalue references" (`&&`)?', answer: 'Referências que podem se ligar a objetos temporários (rvalues). São a base para a semântica de movimento (move semantics).' },
+                    { id: 'cpp_c_25', question: 'O que é "move semantics"?', answer: 'Permite que os recursos de um objeto sejam "movidos" para outro em vez de copiados, evitando alocações de memória caras. Usa construtores e operadores de atribuição de movimento.' },
+                    { id: 'cpp_c_26', question: 'O que são expressões lambda em C++11?', answer: 'Uma forma concisa de criar funções anônimas (closures) diretamente no local onde são usadas.' },
+                    { id: 'cpp_c_27', question: 'O que a palavra-chave `auto` faz?', answer: 'Deduz o tipo de uma variável a partir do seu inicializador, simplificando declarações.' },
+                    { id: 'cpp_c_28', question: 'O que são "variadic templates"?', answer: 'Templates que podem receber um número variável de argumentos de template.' },
+                    { id: 'cpp_c_29', question: 'O que é SFINAE (Substitution Failure Is Not An Error)?', answer: 'Um princípio que se aplica durante a sobrecarga de templates de função. Se a substituição de um tipo de template falhar, o compilador tenta outra sobrecarga em vez de gerar um erro.' },
+                    { id: 'cpp_c_30', question: 'O que é a "Rule of Zero"?', answer: 'Uma regra de ouro que diz que uma classe que não gerencia recursos diretamente (usa smart pointers, contêineres da STL) não precisa declarar nenhum dos cinco membros especiais (destrutor, construtores/atribuições de cópia/movimento).' },
+                ]}
+            ],
+            frameworks: [
+                {
+                    name: 'Qt',
+                    decks: [
+                        { id: 'qt_b_1', name: 'Fundamentos do Qt', difficulty: 'Iniciante', cards: [
+                            { id: 'qt_c_1', question: 'O que é o Qt?', answer: 'Um framework de desenvolvimento de aplicações multiplataforma, amplamente usado para criar interfaces gráficas (GUI), mas também para aplicações de console.' },
+                            { id: 'qt_c_2', question: 'O que é um "sinal" e um "slot"?', answer: 'O mecanismo principal de comunicação entre objetos no Qt. Um sinal é emitido quando um evento ocorre, e um slot é uma função que é chamada em resposta a um sinal.' },
+                            { id: 'qt_c_3', question: 'Qual a classe base para a maioria dos objetos Qt?', answer: '`QObject`.' },
+                            { id: 'qt_c_4', question: 'O que é um "widget"?', answer: 'Um elemento de interface do usuário, como um botão (`QPushButton`), uma caixa de texto (`QLineEdit`) ou uma janela (`QMainWindow`).' },
+                            { id: 'qt_c_5', question: 'O que é um "layout manager"?', answer: 'Uma classe que gerencia o tamanho e a posição dos widgets dentro de uma janela, garantindo que eles se ajustem corretamente quando a janela é redimensionada. Ex: `QVBoxLayout`, `QHBoxLayout`.' },
+                            { id: 'qt_c_6', question: 'Para que serve o `QApplication`?', answer: 'Gerencia o loop de eventos principal da aplicação e os recursos de toda a aplicação.' },
+                            { id: 'qt_c_7', question: 'O que é o MOC (Meta-Object Compiler)?', answer: 'Uma ferramenta que pré-processa os arquivos de cabeçalho do Qt para implementar recursos como sinais e slots, que não são nativos do C++.' },
+                            { id: 'qt_c_8', question: 'Como se conecta um sinal a um slot?', answer: 'Usando a função `QObject::connect(sender, &Sender::signal, receiver, &Receiver::slot);`.' },
+                            { id: 'qt_c_9', question: 'Qual a classe para criar a janela principal de uma aplicação?', answer: '`QMainWindow`.' },
+                            { id: 'qt_c_10', question: 'O que é um arquivo `.pro`?', answer: 'Um arquivo de projeto usado pelo `qmake`, a ferramenta de build do Qt, para definir os arquivos fonte, bibliotecas e outras configurações do projeto.' },
+                        ]},
+                        { id: 'qt_i_1', name: 'Widgets e Eventos', difficulty: 'Intermediário', cards: [
+                            { id: 'qt_c_11', question: 'O que é o sistema de eventos do Qt?', answer: 'O mecanismo pelo qual os objetos são notificados de eventos, como cliques do mouse, pressionamentos de tecla e timers. Os eventos são representados por objetos da classe `QEvent`.' },
+                            { id: 'qt_c_12', question: 'O que é um "event filter"?', answer: 'Um objeto que recebe todos os eventos enviados para outro objeto, permitindo interceptá-los e processá-los antes do objeto de destino.' },
+                            { id: 'qt_c_13', question: 'Qual a diferença entre `QWidget` e `QDialog`?', answer: '`QWidget` é a classe base para todos os widgets. `QDialog` é uma janela especializada para diálogos, que pode ser modal ou não modal.' },
+                            { id: 'qt_c_14', question: 'O que é o "Model/View Framework"?', answer: 'Uma arquitetura para separar os dados (Model) da sua apresentação ao usuário (View), com um delegado (Delegate) opcional para customizar a edição e renderização.' },
+                            { id: 'qt_c_15', question: 'Para que serve a classe `QPainter`?', answer: 'Para realizar desenhos 2D de baixo nível em widgets e outros dispositivos de pintura, como imagens.' },
+                            { id: 'qt_c_16', question: 'O que é o "Qt Resource System"?', answer: 'Um mecanismo para incorporar recursos como imagens e arquivos de tradução diretamente no executável da aplicação.' },
+                            { id: 'qt_c_17', question: 'Como se estiliza um widget usando uma sintaxe similar ao CSS?', answer: 'Usando "Qt Style Sheets", através da propriedade `styleSheet` de um widget.' },
+                            { id: 'qt_c_18', question: 'O que a classe `QTimer` faz?', answer: 'Fornece timers de disparo único ou repetitivos, emitindo um sinal `timeout()` em intervalos especificados.' },
+                            { id: 'qt_c_19', question: 'O que é o `Qt Designer`?', answer: 'Uma ferramenta gráfica para projetar e construir interfaces de usuário com widgets Qt. O resultado é salvo em um arquivo `.ui`.' },
+                            { id: 'qt_c_20', question: 'O que a classe `QSettings` permite fazer?', answer: 'Fornece uma maneira persistente de armazenar as configurações da aplicação, como o tamanho da janela ou opções do usuário, de forma multiplataforma.' },
+                        ]},
+                        { id: 'qt_a_1', name: 'Tópicos Avançados e QML', difficulty: 'Avançado', cards: [
+                            { id: 'qt_c_21', question: 'O que é QML (Qt Modeling Language)?', answer: 'Uma linguagem declarativa, similar a JSON e CSS, para projetar interfaces de usuário. É parte do framework Qt Quick.' },
+                            { id: 'qt_c_22', question: 'Qual a principal vantagem do QML sobre o sistema de Widgets?', answer: 'É ideal para criar UIs fluidas e animadas, especialmente para dispositivos móveis e embarcados, separando a lógica da UI (QML) da lógica de negócio (C++).' },
+                            { id: 'qt_c_23', question: 'O que é o "Qt Concurrent"?', answer: 'Um módulo que fornece classes de alto nível para escrever aplicações multithreaded sem usar primitivas de baixo nível como mutexes. Ex: `QtConcurrent::run`.' },
+                            { id: 'qt_c_24', question: 'Para que serve o módulo `Qt Network`?', answer: 'Fornece classes para programação de rede, como `QTcpSocket` para TCP e `QNetworkAccessManager` para requisições HTTP.' },
+                            { id: 'qt_c_25', question: 'O que é o sistema de "plugins" do Qt?', answer: 'Permite estender a funcionalidade do Qt ou das aplicações Qt dinamicamente, carregando bibliotecas em tempo de execução.' },
+                            { id: 'qt_c_26', question: 'Como o Qt lida com internacionalização (tradução)?', answer: 'Usando as funções `tr()` para marcar strings traduzíveis e as ferramentas `lupdate` e `linguist` para gerar e editar arquivos de tradução (`.ts`).' },
+                            { id: 'qt_c_27', question: 'O que é "Qt Quick Controls"?', answer: 'Um conjunto de controles de UI reutilizáveis (botões, sliders, etc.) para criar interfaces com QML que podem ter um estilo nativo ou customizado.' },
+                            { id: 'qt_c_28', question: 'O que é o "Graphics View Framework"?', answer: 'Uma API baseada em itens para gerenciar e interagir com um grande número de itens gráficos 2D customizados em uma cena (`QGraphicsScene`).' },
+                            { id: 'qt_c_29', question: 'Como se expõe uma classe C++ para o QML?', answer: 'Registrando o tipo C++ com o motor QML usando `qmlRegisterType` e tornando suas propriedades e métodos acessíveis com o sistema de meta-objetos do Qt.' },
+                            { id: 'qt_c_30', question: 'O que é o "Qt Creator"?', answer: 'O IDE (Ambiente de Desenvolvimento Integrado) oficial do Qt, que inclui um editor de código, o Qt Designer, ferramentas de depuração e integração com o sistema de build.' },
+                        ]}
+                    ]
+                }
+            ]
+        },
+        {
+            language: 'HTML',
+            category: 'Front-end',
+            decks: [
+                { id: 'html_b_1', name: 'Tags e Estrutura Básica', difficulty: 'Iniciante', cards: [
+                    { id: 'html_c_1', question: 'O que significa HTML?', answer: 'HyperText Markup Language (Linguagem de Marcação de Hipertexto).' },
+                    { id: 'html_c_2', question: 'Qual a estrutura básica de um documento HTML5?', answer: '`<!DOCTYPE html>`, `<html>`, `<head>` (com `<meta charset="UTF-8">` e `<title>`), e `<body>`.' },
+                    { id: 'html_c_3', question: 'Para que serve a tag `<h1>`?', answer: 'Para definir o cabeçalho de nível mais importante. As tags vão de `<h1>` a `<h6>`.' },
+                    { id: 'html_c_4', question: 'Qual tag é usada para criar um parágrafo?', answer: 'A tag `<p>`.' },
+                    { id: 'html_c_5', question: 'Como se cria um link (âncora) para outra página?', answer: 'Usando a tag `<a>` com o atributo `href`. Ex: `<a href="https://google.com">Google</a>`.' },
+                    { id: 'html_c_6', question: 'Qual tag é usada para inserir uma imagem?', answer: 'A tag `<img>`, com os atributos `src` (fonte) e `alt` (texto alternativo).' },
+                    { id: 'html_c_7', question: 'Para que servem as tags `<ul>` e `<ol>`?', answer: '`<ul>` cria uma lista não ordenada (com marcadores). `<ol>` cria uma lista ordenada (com números).' },
+                    { id: 'html_c_8', question: 'Qual tag é usada para os itens de uma lista (`<ul>` ou `<ol>`)?', answer: 'A tag `<li>` (list item).' },
+                    { id: 'html_c_9', question: 'Qual a diferença entre as tags `<div>` e `<span>`?', answer: '`<div>` é um container de bloco (ocupa a largura inteira). `<span>` é um container em linha (ocupa apenas o espaço do seu conteúdo).' },
+                    { id: 'html_c_10', question: 'Como se adiciona um comentário em HTML?', answer: '`<!-- Seu comentário aqui -->`' },
+                ]},
+                { id: 'html_i_1', name: 'Formulários e Multimídia', difficulty: 'Intermediário', cards: [
+                    { id: 'html_c_11', question: 'Qual tag é usada para criar um formulário?', answer: 'A tag `<form>`.' },
+                    { id: 'html_c_12', question: 'Qual o atributo da tag `<form>` que define para onde os dados serão enviados?', answer: 'O atributo `action`.' },
+                    { id: 'html_c_13', question: 'Qual o atributo da tag `<form>` que define o método HTTP (ex: GET ou POST)?', answer: 'O atributo `method`.' },
+                    { id: 'html_c_14', question: 'Qual tag cria um campo de entrada de dados em um formulário?', answer: 'A tag `<input>`.' },
+                    { id: 'html_c_15', question: 'Qual o propósito do atributo `type` na tag `<input>`?', answer: 'Define o tipo de campo de entrada (ex: `text`, `password`, `checkbox`, `submit`).' },
+                    { id: 'html_c_16', question: 'Para que serve a tag `<label>`?', answer: 'Para fornecer um rótulo para um elemento de formulário, melhorando a acessibilidade.' },
+                    { id: 'html_c_17', question: 'Como se cria uma caixa de seleção (dropdown)?', answer: 'Usando a tag `<select>` com tags `<option>` aninhadas.' },
+                    { id: 'html_c_18', question: 'Qual tag é usada para incorporar um vídeo?', answer: 'A tag `<video>`.' },
+                    { id: 'html_c_19', question: 'Qual tag é usada para incorporar áudio?', answer: 'A tag `<audio>`.' },
+                    { id: 'html_c_20', question: 'O que são tabelas em HTML e qual a tag principal?', answer: 'São usadas para exibir dados tabulares. A tag principal é `<table>`, com `<tr>` (linha), `<th>` (cabeçalho) e `<td>` (célula de dados).' },
+                ]},
+                { id: 'html_a_1', name: 'HTML5 Semântico e APIs', difficulty: 'Avançado', cards: [
+                    { id: 'html_c_21', question: 'O que é HTML Semântico?', answer: 'O uso de tags HTML que transmitem significado sobre o conteúdo, tanto para o navegador quanto para o desenvolvedor (ex: `<header>`, `<article>`).' },
+                    { id: 'html_c_22', question: 'Cite 3 exemplos de tags semânticas do HTML5.', answer: '`<article>`, `<section>`, `<nav>`, `<header>`, `<footer>`, `<aside>`.' },
+                    { id: 'html_c_23', question: 'Para que serve a tag `<canvas>`?', answer: 'É usada para desenhar gráficos, em tempo real, via scripting (geralmente JavaScript).' },
+                    { id: 'html_c_24', question: 'O que são os atributos `data-*`?', answer: 'Permitem armazenar informações extras e personalizadas em elementos HTML padrão, que podem ser acessadas via JavaScript.' },
+                    { id: 'html_c_25', question: 'Para que serve o atributo `async` em uma tag `<script>`?', answer: 'Faz com que o script seja baixado em paralelo com a análise do HTML e executado assim que o download terminar, sem bloquear a renderização.' },
+                    { id: 'html_c_26', question: 'Para que serve o atributo `defer` em uma tag `<script>`?', answer: 'Faz com que o script seja baixado em paralelo, mas só é executado depois que a análise do HTML estiver completa.' },
+                    { id: 'html_c_27', question: 'O que é a API de Geolocalização?', answer: 'Uma API do HTML5 que permite obter a localização geográfica do usuário, com sua permissão.' },
+                    { id: 'html_c_28', question: 'O que é a API de Web Storage?', answer: 'Uma API que fornece mecanismos para armazenar dados no navegador de forma mais segura e com maior capacidade que os cookies (`localStorage` e `sessionStorage`).' },
+                    { id: 'html_c_29', question: 'Para que serve a tag `<figure>`?', answer: 'Para agrupar conteúdo de mídia (como uma imagem, diagrama ou código) com uma legenda (`<figcaption>`).' },
+                    { id: 'html_c_30', question: 'O que são Microdados (Microdata)?', answer: 'Uma especificação do WHATWG para aninhar metadados dentro do conteúdo existente em páginas da web, ajudando os mecanismos de busca a entender melhor o conteúdo.' },
                 ]}
             ],
             frameworks: []
+        },
+        {
+            language: 'CSS',
+            category: 'Front-end',
+            decks: [
+                { id: 'css_b_1', name: 'Seletores e Propriedades Básicas', difficulty: 'Iniciante', cards: [
+                    { id: 'css_c_1', question: 'O que significa CSS?', answer: 'Cascading Style Sheets (Folhas de Estilo em Cascata).' },
+                    { id: 'css_c_2', question: 'Qual a sintaxe de uma regra CSS?', answer: '`seletor { propriedade: valor; }`' },
+                    { id: 'css_c_3', question: 'Como se seleciona um elemento por sua classe?', answer: 'Usando um ponto antes do nome da classe. Ex: `.minha-classe`' },
+                    { id: 'css_c_4', question: 'Como se seleciona um elemento por seu ID?', answer: 'Usando o caractere `#` antes do nome do ID. Ex: `#meu-id`' },
+                    { id: 'css_c_5', question: 'Qual a diferença entre `margin` e `padding`?', answer: '`margin` é o espaçamento fora da borda de um elemento. `padding` é o espaçamento interno, entre o conteúdo e a borda.' },
+                    { id: 'css_c_6', question: 'Qual propriedade é usada para alterar a cor do texto?', answer: '`color`.' },
+                    { id: 'css_c_7', question: 'Qual propriedade é usada para alterar a cor de fundo?', answer: '`background-color`.' },
+                    { id: 'css_c_8', question: 'O que a propriedade `font-size` controla?', answer: 'O tamanho da fonte do texto.' },
+                    { id: 'css_c_9', question: 'Como se comenta em um arquivo CSS?', answer: '`/* Seu comentário aqui */`' },
+                    { id: 'css_c_10', question: 'Quais são as três maneiras de inserir CSS em uma página?', answer: 'Inline (atributo `style`), Interno (tag `<style>` no `<head>`) e Externo (link para um arquivo `.css`).' },
+                ]},
+                { id: 'css_i_1', name: 'Box Model e Layout', difficulty: 'Intermediário', cards: [
+                    { id: 'css_c_11', question: 'O que é o "Box Model" em CSS?', answer: 'É um modelo que descreve como os elementos são renderizados como caixas retangulares, consistindo de conteúdo, padding, borda e margem.' },
+                    { id: 'css_c_12', question: 'O que a propriedade `box-sizing: border-box;` faz?', answer: 'Faz com que a largura e a altura de um elemento incluam o padding e a borda, em vez de adicioná-los ao total.' },
+                    { id: 'css_c_13', question: 'O que é "Flexbox"?', answer: 'Um modelo de layout unidimensional que oferece uma maneira mais eficiente de alinhar e distribuir espaço entre itens em um contêiner.' },
+                    { id: 'css_c_14', question: 'Qual a diferença entre `justify-content` e `align-items` no Flexbox?', answer: '`justify-content` alinha os itens ao longo do eixo principal. `align-items` alinha os itens ao longo do eixo transversal.' },
+                    { id: 'css_c_15', question: 'O que é "CSS Grid Layout"?', answer: 'Um sistema de layout bidimensional, permitindo organizar o conteúdo em linhas e colunas.' },
+                    { id: 'css_c_16', question: 'Qual a diferença entre Flexbox e Grid?', answer: 'Flexbox é ideal para layout em uma dimensão (uma linha ou uma coluna). Grid é ideal para layout em duas dimensões (linhas e colunas).' },
+                    { id: 'css_c_17', question: 'O que são "Media Queries"?', answer: 'Uma técnica usada para aplicar diferentes estilos com base nas características do dispositivo, como largura da tela, permitindo o design responsivo.' },
+                    { id: 'css_c_18', question: 'O que a propriedade `position: relative;` faz?', answer: 'Posiciona o elemento em relação à sua posição normal. Permite o uso de `top`, `right`, `bottom`, `left` e serve como referência para elementos filhos com `position: absolute`.' },
+                    { id: 'css_c_19', question: 'O que a propriedade `position: absolute;` faz?', answer: 'Posiciona o elemento em relação ao seu ancestral posicionado mais próximo (não `static`). Se não houver, usa o corpo do documento.' },
+                    { id: 'css_c_20', question: 'O que são pseudo-classes?', answer: 'Uma palavra-chave adicionada a um seletor que especifica um estado especial do elemento selecionado. Ex: `:hover`, `:first-child`.' },
+                ]},
+                { id: 'css_a_1', name: 'Tópicos Avançados e Pré-processadores', difficulty: 'Avançado', cards: [
+                    { id: 'css_c_21', question: 'O que são pseudo-elementos?', answer: 'Uma palavra-chave adicionada a um seletor que permite estilizar uma parte específica do elemento selecionado. Ex: `::before`, `::after`.' },
+                    { id: 'css_c_22', question: 'O que são Variáveis CSS (Custom Properties)?', answer: 'Entidades definidas por autores de CSS que contêm valores específicos para serem reutilizados em um documento. Ex: `var(--minha-cor)`.' },
+                    { id: 'css_c_23', question: 'O que a propriedade `transform` permite fazer?', answer: 'Modificar o espaço de coordenadas do modelo de formatação CSS, permitindo rotacionar, escalar, mover ou inclinar elementos.' },
+                    { id: 'css_c_24', question: 'Para que serve a propriedade `transition`?', answer: 'Permite controlar a velocidade da animação ao alterar propriedades CSS, criando uma mudança suave entre estados.' },
+                    { id: 'css_c_25', question: 'O que são "Keyframes" em CSS?', answer: 'Usados com a propriedade `animation`, permitem definir os estágios e estilos de uma sequência de animação CSS.' },
+                    { id: 'css_c_26', question: 'O que é a especificidade do CSS?', answer: 'O algoritmo usado pelos navegadores para determinar qual declaração de propriedade CSS é a mais relevante e deve ser aplicada a um elemento. IDs têm maior especificidade que classes.' },
+                    { id: 'css_c_27', question: 'O que é um pré-processador CSS, como Sass ou Less?', answer: 'Uma ferramenta que permite usar recursos que não existem no CSS, como variáveis, aninhamento, mixins e funções, e depois compila esse código para CSS normal.' },
+                    { id: 'css_c_28', question: 'O que é um "mixin" em Sass?', answer: 'Um bloco de código que permite agrupar declarações CSS para serem reutilizadas em todo o site.' },
+                    { id: 'css_c_29', question: 'O que é a metodologia BEM?', answer: 'Block, Element, Modifier. Uma convenção de nomenclatura para classes em HTML e CSS, projetada para ajudar a escrever componentes de UI reutilizáveis e compartilháveis.' },
+                    { id: 'css_c_30', question: 'O que a regra `@supports` faz?', answer: 'Permite verificar se o navegador suporta um par específico de `propriedade: valor` CSS e aplicar estilos condicionalmente.' },
+                ]}
+            ],
+            frameworks: [
+                {
+                    name: 'Bootstrap',
+                    decks: [
+                        { id: 'bs_b_1', name: 'Sistema de Grid e Utilitários', difficulty: 'Iniciante', cards: [
+                            { id: 'bs_c_1', question: 'O que é Bootstrap?', answer: 'Um framework front-end de código aberto para desenvolver com HTML, CSS e JS, focado em design responsivo e mobile-first.' },
+                            { id: 'bs_c_2', question: 'Qual é a base do sistema de layout do Bootstrap?', answer: 'Um sistema de grid de 12 colunas, flexível e responsivo.' },
+                            { id: 'bs_c_3', question: 'Qual classe é usada para criar um contêiner de largura fixa?', answer: '`.container`' },
+                            { id: 'bs_c_4', question: 'Qual classe é usada para criar um contêiner de largura total?', answer: '`.container-fluid`' },
+                            { id: 'bs_c_5', question: 'Como se define uma linha no sistema de grid?', answer: 'Usando a classe `.row`.' },
+                            { id: 'bs_c_6', question: 'Como se define uma coluna que ocupa 6 das 12 colunas em telas médias?', answer: 'Usando a classe `.col-md-6`.' },
+                            { id: 'bs_c_7', question: 'O que os prefixos `sm`, `md`, `lg`, `xl` representam nas classes de coluna?', answer: 'Os breakpoints responsivos: small, medium, large, extra large.' },
+                            { id: 'bs_c_8', question: 'Como se cria um botão azul primário?', answer: '`<button class="btn btn-primary">Botão</button>`' },
+                            { id: 'bs_c_9', question: 'O que são as classes de utilitário de espaçamento (ex: `m-3`, `p-2`)?', answer: 'Classes para adicionar `margin` ou `padding` rapidamente a um elemento.' },
+                            { id: 'bs_c_10', question: 'Como se centraliza um texto usando uma classe de utilitário?', answer: 'Usando a classe `.text-center`.' },
+                        ]},
+                        { id: 'bs_i_1', name: 'Componentes', difficulty: 'Intermediário', cards: [
+                            { id: 'bs_c_11', question: 'O que é um "Card" no Bootstrap?', answer: 'Um contêiner de conteúdo flexível e extensível, que pode incluir cabeçalho, rodapé, imagens e texto.' },
+                            { id: 'bs_c_12', question: 'Como se cria uma barra de navegação (Navbar)?', answer: 'Usando a tag `<nav>` com as classes `.navbar`, `.navbar-expand-lg`, etc.' },
+                            { id: 'bs_c_13', question: 'O que é um "Modal"?', answer: 'Uma janela de diálogo pop-up que é exibida sobre o conteúdo da página.' },
+                            { id: 'bs_c_14', question: 'Como se cria um "Carousel"?', answer: 'Usando uma estrutura de `div`s com as classes `.carousel`, `.carousel-inner` e `.carousel-item`.' },
+                            { id: 'bs_c_15', question: 'O que é um "Accordion"?', answer: 'Um componente que permite exibir e ocultar seções de conteúdo de forma sanfonada.' },
+                            { id: 'bs_c_16', question: 'Para que servem os "Alerts"?', answer: 'Para fornecer mensagens de feedback contextuais para ações típicas do usuário (ex: sucesso, erro, aviso).' },
+                            { id: 'bs_c_17', question: 'O que são "Badges"?', answer: 'Pequenos componentes de contagem e rotulagem, úteis para destacar itens ou notificações.' },
+                            { id: 'bs_c_18', question: 'Como se cria um grupo de botões?', answer: 'Envolvendo uma série de botões em um `div` com a classe `.btn-group`.' },
+                            { id: 'bs_c_19', question: 'O que são "Breadcrumbs"?', answer: 'Um esquema de navegação secundário que indica a localização do usuário em um site ou aplicativo.' },
+                            { id: 'bs_c_20', question: 'Como se cria um formulário com estilo Bootstrap?', answer: 'Usando as classes `.form-group`, `.form-control` e `.form-label` para estruturar e estilizar os elementos do formulário.' },
+                        ]},
+                        { id: 'bs_a_1', name: 'Customização e JavaScript', difficulty: 'Avançado', cards: [
+                            { id: 'bs_c_21', question: 'Como se customiza as cores padrão do Bootstrap?', answer: 'Usando Sass para sobrescrever as variáveis de cor padrão (ex: `$primary`) e recompilando o CSS.' },
+                            { id: 'bs_c_22', question: 'O que é o arquivo `_variables.scss`?', answer: 'É o arquivo Sass do Bootstrap que contém todas as variáveis padrão que podem ser sobrescritas para customização.' },
+                            { id: 'bs_c_23', question: 'Quais são as dependências JavaScript do Bootstrap?', answer: 'Popper.js (para tooltips e popovers) e o próprio JavaScript do Bootstrap.' },
+                            { id: 'bs_c_24', question: 'Como se inicializa um componente JavaScript do Bootstrap, como um tooltip?', answer: 'Selecionando o elemento e chamando o método correspondente. Ex: `new bootstrap.Tooltip(element)`.' },
+                            { id: 'bs_c_25', question: 'O que são os "Data Attributes" do Bootstrap?', answer: 'Atributos HTML (como `data-bs-toggle`) que permitem usar a funcionalidade JavaScript do Bootstrap sem escrever uma linha de JavaScript.' },
+                            { id: 'bs_c_26', question: 'Como se cria um tema escuro (dark mode) no Bootstrap 5?', answer: 'Adicionando o atributo `data-bs-theme="dark"` ao elemento `<html>` ou a um contêiner específico.' },
+                            { id: 'bs_c_27', question: 'O que a classe `.d-flex` faz?', answer: 'Aplica `display: flex` a um elemento, transformando-o em um contêiner flexbox.' },
+                            { id: 'bs_c_28', question: 'Como se oculta um elemento em telas pequenas (`sm`) e o exibe em telas médias (`md`) e maiores?', answer: 'Usando as classes `.d-none .d-md-block`.' },
+                            { id: 'bs_c_29', question: 'O que é o utilitário "gutters" (classes `g-*`)?', answer: 'Controla o espaçamento entre as colunas no sistema de grid.' },
+                            { id: 'bs_c_30', question: 'É possível usar os componentes JavaScript do Bootstrap sem jQuery?', answer: 'Sim, a partir do Bootstrap 5, o jQuery não é mais uma dependência.' },
+                        ]}
+                    ]
+                }
+            ]
         },
         {
             language: 'JavaScript',
@@ -418,7 +630,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderCodeDecks(category) {
         codeDecksContainer.innerHTML = '';
-        const categoryTabs = codeDecksContainer.previousElementSibling.querySelector('.code-category-tabs');
+        const categoryTabs = document.querySelector('.code-category-tabs');
         categoryTabs.querySelectorAll('button').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.category === category);
         });
@@ -437,7 +649,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let contentHTML = `<div class="language-content">`;
             
-            // Base language decks
             contentHTML += `<div class="sub-tab-content active" id="${lang.language}-base">`;
             const levels = { 'Iniciante': [], 'Intermediário': [], 'Avançado': [] };
             lang.decks.forEach(deck => levels[deck.difficulty].push(deck));
@@ -456,7 +667,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             contentHTML += `</div>`;
 
-            // Framework decks
             lang.frameworks.forEach(fw => {
                 contentHTML += `<div class="sub-tab-content" id="${lang.language}-${fw.name}">`;
                 const fwLevels = { 'Iniciante': [], 'Intermediário': [], 'Avançado': [] };
