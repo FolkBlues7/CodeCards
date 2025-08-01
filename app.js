@@ -4,48 +4,93 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const codeDecks = [
         {
-            language: 'JavaScript',
+            language: 'Java',
+            category: 'Back-end',
             decks: [
-                { id: 'js_b_1', name: 'Variáveis e Tipos de Dados', difficulty: 'Iniciante', cards: [
-                    { id: 'js_c_1', question: 'Qual a palavra-chave para declarar uma variável que não pode ser reatribuída?', answer: 'const' },
-                    { id: 'js_c_2', question: 'Qual a diferença entre `==` e `===`?', answer: '`==` compara por valor (com coerção de tipo), `===` compara por valor e tipo (sem coerção).' },
-                    { id: 'js_c_5', question: 'O que é `undefined` em JavaScript?', answer: 'Uma variável que foi declarada, mas ainda não teve um valor atribuído.' },
-                    { id: 'js_c_6', question: 'Qual a diferença entre `null` e `undefined`?', answer: '`undefined` significa que uma variável não teve valor atribuído. `null` é um valor de atribuição que representa a ausência intencional de qualquer valor de objeto.' },
-                    { id: 'js_c_7', question: 'Como se declara uma variável que pode ser reatribuída?', answer: 'Usando a palavra-chave `let`.' },
-                    { id: 'js_c_8', question: 'Qual dos 7 tipos primitivos do JavaScript representa um valor lógico?', answer: 'Boolean (pode ser `true` ou `false`).' },
-                    { id: 'js_c_9', question: 'Como você verifica o tipo de uma variável em JavaScript?', answer: 'Usando o operador `typeof`.' },
-                    { id: 'js_c_10', question: 'Qual o resultado de `"5" + 3`?', answer: '`"53"` (String). O JavaScript converte o número 3 para string e concatena.' },
-                    { id: 'js_c_11', question: 'Qual o resultado de `"5" - 3`?', answer: '`2` (Number). O JavaScript converte a string "5" para número e subtrai.' },
-                    { id: 'js_c_12', question: 'O que a expressão `!true` retorna?', answer: '`false`. O operador `!` é o operador de negação lógica (NOT).' },
+                { id: 'jv_b_1', name: 'Fundamentos e Sintaxe', difficulty: 'Iniciante', cards: [
+                    { id: 'jv_c_1', question: 'Qual a diferença entre JDK, JRE e JVM?', answer: 'JVM executa o bytecode. JRE contém a JVM e bibliotecas. JDK contém a JRE e ferramentas de desenvolvimento.' },
+                    { id: 'jv_c_2', question: 'O que é o método `public static void main(String[] args)`?', answer: 'É o ponto de entrada de qualquer aplicação Java standalone.' },
+                    { id: 'jv_c_3', question: 'Quais são os 8 tipos de dados primitivos em Java?', answer: 'byte, short, int, long, float, double, char, boolean.' },
+                    { id: 'jv_c_4', question: 'Qual a diferença entre tipos primitivos e tipos de referência?', answer: 'Primitivos armazenam o valor diretamente. Tipos de referência (objetos) armazenam um endereço para o objeto.' },
+                    { id: 'jv_c_5', question: 'Como se declara e instancia um objeto em Java?', answer: '`NomeDaClasse nomeDoObjeto = new NomeDaClasse();`' },
+                    { id: 'jv_c_6', question: 'A classe `String` é um tipo primitivo?', answer: 'Não, `String` é uma classe (tipo de referência) imutável.' },
+                    { id: 'jv_c_7', question: 'Para que serve a palavra-chave `final`?', answer: 'Para variáveis, impede a reatribuição. Para métodos, impede a sobrescrita. Para classes, impede a herança.' },
+                    { id: 'jv_c_8', question: 'O que é um construtor?', answer: 'Um método especial para inicializar um objeto recém-criado.' },
+                    { id: 'jv_c_9', question: 'Qual a diferença entre `==` e o método `.equals()` para objetos?', answer: '`==` compara referências de memória. `.equals()` compara o conteúdo dos objetos.' },
+                    { id: 'jv_c_10', question: 'O que é "garbage collection"?', answer: 'O processo automático do Java de liberar memória de objetos que não são mais referenciados.' },
                 ]},
-                { id: 'js_i_1', name: 'Funções e Escopo', difficulty: 'Intermediário', cards: [
-                    { id: 'js_c_3', question: 'O que é uma closure (fechamento) em JavaScript?', answer: 'É a combinação de uma função com as referências ao seu estado circundante (seu escopo léxico).' },
-                    { id: 'js_c_13', question: 'O que são "Arrow Functions"?', answer: 'Uma sintaxe mais curta para escrever expressões de função. Elas não têm seu próprio `this`, `arguments`, `super`, ou `new.target`.' },
-                    { id: 'js_c_14', question: 'Qual a diferença entre escopo de função e escopo de bloco?', answer: 'Variáveis declaradas com `var` têm escopo de função. Variáveis com `let` e `const` têm escopo de bloco (limitadas ao bloco `{}` onde foram declaradas).' },
-                    { id: 'js_c_15', question: 'O que é "Hoisting" em JavaScript?', answer: 'É o comportamento padrão do JavaScript de mover as declarações para o topo do escopo atual antes da execução do código.' },
-                    { id: 'js_c_16', question: 'O que o método `map()` faz em um array?', answer: 'Cria um novo array populado com os resultados da chamada de uma função para cada elemento do array.' },
-                    { id: 'js_c_17', question: 'Qual a diferença entre `map()` e `forEach()`?', answer: '`map()` retorna um novo array com os elementos transformados. `forEach()` executa uma função para cada elemento, mas não retorna um novo array.' },
-                    { id: 'js_c_18', question: 'Para que serve o método `filter()`?', answer: 'Cria um novo array com todos os elementos que passam no teste implementado pela função fornecida.' },
-                    { id: 'js_c_19', question: 'O que o método `reduce()` faz?', answer: 'Executa uma função "redutora" para cada elemento do array, resultando num único valor de retorno.' },
-                    { id: 'js_c_20', question: 'O que é o `this` em JavaScript?', answer: 'É uma palavra-chave que se refere ao objeto ao qual a função pertence. Seu valor é determinado por como a função é chamada.' },
-                    { id: 'js_c_21', question: 'O que é uma função de "callback"?', answer: 'É uma função passada como argumento para outra função, para ser "chamada de volta" (executada) mais tarde.' },
+                { id: 'jv_i_1', name: 'Orientação a Objetos', difficulty: 'Intermediário', cards: [
+                    { id: 'jv_c_11', question: 'Quais são os 4 pilares da POO?', answer: 'Encapsulamento, Herança, Polimorfismo e Abstração.' },
+                    { id: 'jv_c_12', question: 'O que é Herança?', answer: 'Um mecanismo onde uma subclasse herda atributos e métodos de uma superclasse.' },
+                    { id: 'jv_c_13', question: 'O que é Polimorfismo?', answer: 'A capacidade de um objeto assumir muitas formas, tratando objetos de subclasses como se fossem da superclasse.' },
+                    { id: 'jv_c_14', question: 'Diferença entre classe abstrata e interface?', answer: 'Uma classe herda de uma classe abstrata, mas implementa múltiplas interfaces. Classes abstratas podem ter métodos implementados.' },
+                    { id: 'jv_c_15', question: 'O que é Encapsulamento?', answer: 'Agrupar dados e métodos em uma classe, restringindo o acesso direto aos dados.' },
+                    { id: 'jv_c_16', question: 'Quais são os modificadores de acesso em Java?', answer: '`public`, `protected`, `default` (nível de pacote) e `private`.' },
+                    { id: 'jv_c_17', question: 'O que é a palavra-chave `super`?', answer: 'É usada para se referir a membros da superclasse imediata.' },
+                    { id: 'jv_c_18', question: 'O que é "method overriding" (sobrescrita)?', answer: 'Quando uma subclasse fornece uma implementação específica para um método da superclasse.' },
+                    { id: 'jv_c_19', question: 'O que é "method overloading" (sobrecarga)?', answer: 'Quando duas ou mais funções na mesma classe têm o mesmo nome, mas parâmetros diferentes.' },
+                    { id: 'jv_c_20', question: 'Para que serve o bloco `try-catch-finally`?', answer: '`try` contém código arriscado, `catch` trata exceções, e `finally` executa sempre, com ou sem exceção.' },
                 ]},
-                { id: 'js_a_1', name: 'Promises e Assincronismo', difficulty: 'Avançado', cards: [
-                    { id: 'js_c_4', question: 'O que `async/await` faz?', answer: 'É uma sintaxe para trabalhar com Promises de forma mais síncrona, tornando o código assíncrono mais fácil de ler.' },
-                    { id: 'js_c_22', question: 'O que é uma "Promise" em JavaScript?', answer: 'Um objeto que representa a eventual conclusão (ou falha) de uma operação assíncrona e seu valor resultante.' },
-                    { id: 'js_c_23', question: 'Quais são os três estados de uma Promise?', answer: '`pending` (pendente), `fulfilled` (realizada com sucesso), e `rejected` (rejeitada).' },
-                    { id: 'js_c_24', question: 'Para que serve o `Promise.all()`?', answer: 'Recebe um array de Promises e retorna uma única Promise que é resolvida quando todas as Promises no array são resolvidas.' },
-                    { id: 'js_c_25', question: 'O que é o "Event Loop"?', answer: 'É um processo que permite ao Node.js (e ao JavaScript no navegador) realizar operações não-bloqueantes de I/O, apesar do fato de que o JavaScript é single-threaded.' },
-                    { id: 'js_c_26', question: 'O que é "prototype" em JavaScript?', answer: 'É um mecanismo pelo qual objetos JavaScript herdam recursos uns dos outros. Cada objeto tem uma propriedade privada que mantém um link para outro objeto chamado seu protótipo.' },
-                    { id: 'js_c_27', question: 'Qual a diferença entre `Object.create()` e o construtor `new`?', answer: '`Object.create()` cria um novo objeto com o objeto protótipo especificado. `new` cria um novo objeto e invoca a função construtora.' },
-                    { id: 'js_c_28', question: 'O que são "Web Workers"?', answer: 'Permitem a execução de scripts em um thread de segundo plano, liberando o thread principal para a interface do usuário e evitando que a página congele.' },
-                    { id: 'js_c_29', question: 'Para que serve o `bind()`?', answer: 'Cria uma nova função que, quando chamada, tem sua palavra-chave `this` definida com o valor fornecido, com uma sequência de argumentos.' },
-                    { id: 'js_c_30', question: 'O que são Módulos em JavaScript (ES6)?', answer: 'São arquivos que permitem dividir o código em componentes reutilizáveis e organizados, usando `import` e `export`.' },
+                { id: 'jv_a_1', name: 'Tópicos Avançados e API', difficulty: 'Avançado', cards: [
+                    { id: 'jv_c_21', question: 'O que é a "Collections Framework"?', answer: 'Uma arquitetura unificada para representar e manipular coleções (List, Set, Map).' },
+                    { id: 'jv_c_22', question: 'Diferença entre `ArrayList` e `LinkedList`?', answer: '`ArrayList` usa um array dinâmico (acesso rápido por índice). `LinkedList` usa uma lista duplamente encadeada (inserções/remoções rápidas).' },
+                    { id: 'jv_c_23', question: 'O que são "Generics"?', answer: 'Permitem que tipos sejam parâmetros, fornecendo segurança de tipo em tempo de compilação.' },
+                    { id: 'jv_c_24', question: 'O que são "Lambda Expressions"?', answer: 'Uma forma curta de representar uma função anônima (instância de uma interface funcional).' },
+                    { id: 'jv_c_25', question: 'O que é a "Stream API"?', answer: 'Uma API para processar sequências de elementos de forma funcional (`filter`, `map`, `reduce`).' },
+                    { id: 'jv_c_26', question: 'O que é uma "interface funcional"?', answer: 'Uma interface que contém exatamente um método abstrato, anotada com `@FunctionalInterface`.' },
+                    { id: 'jv_c_27', question: 'Como se cria e inicia uma thread em Java?', answer: 'Estendendo `Thread` ou implementando `Runnable`, e chamando o método `.start()`.' },
+                    { id: 'jv_c_28', question: 'O que a palavra-chave `synchronized` faz?', answer: 'Garante que apenas um thread por vez possa executar um bloco de código, prevenindo condições de corrida.' },
+                    { id: 'jv_c_29', question: 'O que é "Reflection API"?', answer: 'Permite que um programa examine ou modifique o comportamento de classes e métodos em tempo de execução.' },
+                    { id: 'jv_c_30', question: 'Diferença entre `HashMap` e `Hashtable`?', answer: '`HashMap` não é thread-safe e permite chaves/valores nulos. `Hashtable` é thread-safe e não permite.' },
                 ]}
+            ],
+            frameworks: [
+                {
+                    name: 'Spring',
+                    decks: [
+                        { id: 'sp_b_1', name: 'Core e Injeção de Dependência', difficulty: 'Iniciante', cards: [
+                            { id: 'sp_c_1', question: 'O que é o Spring Framework?', answer: 'Um framework de aplicação para Java que fornece suporte de infraestrutura abrangente para o desenvolvimento de aplicações Java.' },
+                            { id: 'sp_c_2', question: 'O que é Injeção de Dependência (DI)?', answer: 'Um padrão de projeto onde um objeto recebe suas dependências de uma fonte externa em vez de criá-las internamente.' },
+                            { id: 'sp_c_3', question: 'O que é um "Bean" no Spring?', answer: 'Um objeto que é instanciado, montado e gerenciado por um contêiner Spring (IoC container).' },
+                            { id: 'sp_c_4', question: 'Qual a anotação para marcar uma classe como um componente Spring?', answer: '`@Component`, ou especializações como `@Service`, `@Repository`, `@Controller`.' },
+                            { id: 'sp_c_5', question: 'Para que serve a anotação `@Autowired`?', answer: 'Para injetar beans automaticamente. O Spring procura por um bean do tipo correspondente e o injeta.' },
+                            { id: 'sp_c_6', question: 'O que é o "ApplicationContext"?', answer: 'A interface central do contêiner Spring, responsável por gerenciar o ciclo de vida dos beans.' },
+                            { id: 'sp_c_7', question: 'Qual a diferença entre injeção por construtor e por setter?', answer: 'Injeção por construtor garante que as dependências obrigatórias sejam fornecidas na criação do objeto. Injeção por setter é para dependências opcionais.' },
+                            { id: 'sp_c_8', question: 'O que é um "Qualifier"?', answer: 'A anotação `@Qualifier` é usada junto com `@Autowired` para evitar ambiguidade quando existem múltiplos beans do mesmo tipo.' },
+                            { id: 'sp_c_9', question: 'O que significa "escopo de bean"?', answer: 'Define o ciclo de vida e a visibilidade de um bean. Padrões são `singleton` e `prototype`.' },
+                            { id: 'sp_c_10', question: 'Qual o escopo padrão de um bean no Spring?', answer: '`singleton` (uma única instância do bean é criada por contêiner).' },
+                        ]},
+                        { id: 'sp_i_1', name: 'Spring Boot e Web', difficulty: 'Intermediário', cards: [
+                            { id: 'sp_c_11', question: 'O que é o Spring Boot?', answer: 'Um projeto que facilita a criação de aplicações Spring autônomas e prontas para produção com configuração mínima.' },
+                            { id: 'sp_c_12', question: 'Qual a principal anotação de uma aplicação Spring Boot?', answer: '`@SpringBootApplication`.' },
+                            { id: 'sp_c_13', question: 'O que é um "starter" no Spring Boot?', answer: 'Um conjunto de descritores de dependência convenientes que você pode incluir em sua aplicação. Ex: `spring-boot-starter-web`.' },
+                            { id: 'sp_c_14', question: 'Para que serve a anotação `@RestController`?', answer: 'Uma conveniência que combina `@Controller` e `@ResponseBody`, indicando que os métodos retornam dados que serão escritos diretamente no corpo da resposta.' },
+                            { id: 'sp_c_15', question: 'Como se mapeia uma requisição HTTP GET para um método?', answer: 'Usando a anotação `@GetMapping("/caminho")`.' },
+                            { id: 'sp_c_16', question: 'O que a anotação `@RequestParam` faz?', answer: 'Vincula um parâmetro de requisição da URL a um parâmetro do método no controller.' },
+                            { id: 'sp_c_17', question: 'O que a anotação `@PathVariable` faz?', answer: 'Vincula uma variável de caminho da URL (ex: `/users/{id}`) a um parâmetro do método.' },
+                            { id: 'sp_c_18', question: 'O que é o Spring MVC?', answer: 'Um framework web baseado no padrão Model-View-Controller que fornece uma arquitetura para construir aplicações web flexíveis.' },
+                            { id: 'sp_c_19', question: 'Qual o propósito do arquivo `application.properties` (ou `.yml`)?', answer: 'Para configurar a aplicação Spring Boot, como porta do servidor, configurações de banco de dados, etc.' },
+                            { id: 'sp_c_20', question: 'O que é o Thymeleaf?', answer: 'Um motor de templates Java moderno do lado do servidor para ambientes web e autônomos, que se integra bem com o Spring.' },
+                        ]},
+                        { id: 'sp_a_1', name: 'Data, Security e AOP', difficulty: 'Avançado', cards: [
+                            { id: 'sp_c_21', question: 'O que é o Spring Data JPA?', answer: 'Um projeto que facilita a implementação de repositórios baseados em JPA, reduzindo significativamente o código boilerplate.' },
+                            { id: 'sp_c_22', question: 'Qual a interface principal do Spring Data JPA?', answer: '`JpaRepository`, que fornece métodos CRUD e de paginação/ordenação.' },
+                            { id: 'sp_c_23', question: 'O que é AOP (Aspect-Oriented Programming)?', answer: 'Programação Orientada a Aspectos. Permite modularizar preocupações transversais (cross-cutting concerns) como logging, segurança e transações.' },
+                            { id: 'sp_c_24', question: 'O que é um "Aspect" no Spring AOP?', answer: 'Uma classe que implementa uma preocupação transversal. É anotada com `@Aspect`.' },
+                            { id: 'sp_c_25', question: 'O que é um "Join Point"?', answer: 'Um ponto durante a execução de um programa, como a execução de um método. No Spring AOP, um join point é sempre a execução de um método.' },
+                            { id: 'sp_c_26', question: 'O que é um "Advice"?', answer: 'A ação tomada por um aspecto em um determinado join point. Tipos incluem `@Before`, `@After`, `@Around`.' },
+                            { id: 'sp_c_27', question: 'O que é o Spring Security?', answer: 'Um framework poderoso e altamente customizável que fornece autenticação e controle de acesso (autorização) para aplicações Java.' },
+                            { id: 'sp_c_28', question: 'O que é a anotação `@Transactional`?', answer: 'Define o escopo de uma única transação de banco de dados. O Spring gerencia o início, commit e rollback da transação.' },
+                            { id: 'sp_c_29', question: 'O que é o H2 Database?', answer: 'Um banco de dados em memória, escrito em Java, frequentemente usado para desenvolvimento e testes com Spring Boot.' },
+                            { id: 'sp_c_30', question: 'O que são "profiles" no Spring?', answer: 'Uma forma de segregar partes da configuração da sua aplicação e torná-las disponíveis apenas em determinados ambientes (ex: `dev`, `test`, `prod`).' },
+                        ]}
+                    ]
+                }
             ]
         },
         {
             language: 'Python',
+            category: 'Back-end',
             decks: [
                 { id: 'py_b_1', name: 'Sintaxe e Tipos de Dados', difficulty: 'Iniciante', cards: [
                     { id: 'py_c_1', question: 'Qual a principal diferença entre uma Lista e uma Tupla em Python?', answer: 'Listas são mutáveis (podem ser alteradas), enquanto Tuplas são imutáveis.' },
@@ -83,58 +128,158 @@ document.addEventListener('DOMContentLoaded', () => {
                     { id: 'py_c_29', question: 'O que o `collections.deque` oferece?', answer: 'Uma lista generalizada de dupla extremidade que suporta adições e remoções rápidas de ambos os lados (append e pop).' },
                     { id: 'py_c_30', question: 'O que é "duck typing"?', answer: '"Se anda como um pato e grasna como um pato, então deve ser um pato." O tipo de um objeto não importa, apenas se ele possui os métodos e propriedades necessários.' },
                 ]}
-            ]
+            ],
+            frameworks: []
         },
         {
-            language: 'Java',
+            language: 'C',
+            category: 'Back-end',
             decks: [
-                { id: 'jv_b_1', name: 'Fundamentos e Sintaxe', difficulty: 'Iniciante', cards: [
-                    { id: 'jv_c_1', question: 'Qual a diferença entre JDK, JRE e JVM?', answer: 'JVM (Java Virtual Machine) executa o bytecode. JRE (Java Runtime Environment) contém a JVM e bibliotecas. JDK (Java Development Kit) contém a JRE e ferramentas de desenvolvimento.' },
-                    { id: 'jv_c_2', question: 'O que é o método `public static void main(String[] args)`?', answer: 'É o ponto de entrada de qualquer aplicação Java standalone.' },
-                    { id: 'jv_c_3', question: 'Quais são os 8 tipos de dados primitivos em Java?', answer: 'byte, short, int, long, float, double, char, boolean.' },
-                    { id: 'jv_c_4', question: 'Qual a diferença entre tipos primitivos e tipos de referência?', answer: 'Primitivos armazenam o valor diretamente. Tipos de referência (objetos) armazenam um endereço para a localização do objeto na memória.' },
-                    { id: 'jv_c_5', question: 'Como se declara e instancia um objeto em Java?', answer: '`NomeDaClasse nomeDoObjeto = new NomeDaClasse();`' },
-                    { id: 'jv_c_6', question: 'A classe `String` é um tipo primitivo?', answer: 'Não, `String` é uma classe (tipo de referência), mas possui tratamento especial, como a imutabilidade.' },
-                    { id: 'jv_c_7', question: 'Para que serve a palavra-chave `final`?', answer: 'Para variáveis, impede a reatribuição. Para métodos, impede a sobrescrita. Para classes, impede a herança.' },
-                    { id: 'jv_c_8', question: 'O que é um construtor?', answer: 'Um método especial para inicializar um objeto recém-criado. Ele é chamado no momento da instanciação do objeto.' },
-                    { id: 'jv_c_9', question: 'Qual a diferença entre `==` e o método `.equals()` para objetos?', answer: '`==` compara se as referências apontam para o mesmo objeto na memória. `.equals()` compara o conteúdo ou estado dos objetos (se sobrescrito).' },
-                    { id: 'jv_c_10', question: 'O que é "garbage collection" (coleta de lixo)?', answer: 'É o processo automático do Java de encontrar e liberar a memória usada por objetos que não estão mais sendo referenciados.' },
+                { id: 'c_b_1', name: 'Fundamentos da Linguagem C', difficulty: 'Iniciante', cards: [
+                    { id: 'c_c_1', question: 'Qual a função principal que inicia a execução de um programa em C?', answer: 'A função `main()`.' },
+                    { id: 'c_c_2', question: 'Como se declara uma variável inteira em C?', answer: '`int nome_da_variavel;`' },
+                    { id: 'c_c_3', question: 'Para que serve a diretiva `#include <stdio.h>`?', answer: 'Para incluir a biblioteca padrão de entrada e saída (Standard Input/Output), que contém funções como `printf` e `scanf`.' },
+                    { id: 'c_c_4', question: 'Qual a função utilizada para imprimir texto no console?', answer: '`printf()`.' },
+                    { id: 'c_c_5', question: 'O que é um ponteiro?', answer: 'Uma variável que armazena o endereço de memória de outra variável.' },
+                    { id: 'c_c_6', question: 'Como se obtém o endereço de memória de uma variável?', answer: 'Usando o operador `&` (endereço de).' },
+                    { id: 'c_c_7', question: 'O que o operador `*` faz quando usado com um ponteiro?', answer: 'Acessa o valor armazenado no endereço de memória para o qual o ponteiro aponta (dereferenciação).' },
+                    { id: 'c_c_8', question: 'Para que serve a estrutura de controle `if-else`?', answer: 'Para executar blocos de código condicionalmente, com base em uma expressão booleana.' },
+                    { id: 'c_c_9', question: 'Qual a diferença entre os loops `while` e `do-while`?', answer: '`while` testa a condição antes de executar o bloco. `do-while` executa o bloco pelo menos uma vez e depois testa a condição.' },
+                    { id: 'c_c_10', question: 'Como se define uma constante em C?', answer: 'Usando a diretiva `#define` ou a palavra-chave `const`.' },
                 ]},
-                { id: 'jv_i_1', name: 'Orientação a Objetos', difficulty: 'Intermediário', cards: [
-                    { id: 'jv_c_11', question: 'Quais são os 4 pilares da Programação Orientada a Objetos (POO)?', answer: 'Encapsulamento, Herança, Polimorfismo e Abstração.' },
-                    { id: 'jv_c_12', question: 'O que é Herança?', answer: 'Um mecanismo onde uma nova classe (subclasse) deriva de uma classe existente (superclasse), herdando seus atributos e métodos.' },
-                    { id: 'jv_c_13', question: 'O que é Polimorfismo?', answer: 'A capacidade de um objeto assumir muitas formas. Permite que um objeto de uma subclasse seja tratado como um objeto de sua superclasse.' },
-                    { id: 'jv_c_14', question: 'Qual a diferença entre uma classe abstrata e uma interface?', answer: 'Uma classe pode herdar de apenas uma classe abstrata, mas pode implementar múltiplas interfaces. Classes abstratas podem ter métodos com implementação, interfaces (antes do Java 8) só tinham assinaturas.' },
-                    { id: 'jv_c_15', question: 'O que é Encapsulamento?', answer: 'O conceito de agrupar dados (atributos) e os métodos que operam nesses dados em uma única unidade (classe), e restringir o acesso direto aos dados usando modificadores de acesso.' },
-                    { id: 'jv_c_16', question: 'Quais são os modificadores de acesso em Java?', answer: '`public`, `protected`, `default` (nível de pacote) e `private`.' },
-                    { id: 'jv_c_17', question: 'O que é a palavra-chave `super`?', answer: 'É usada para se referir a membros (métodos, construtores, atributos) da superclasse imediata.' },
-                    { id: 'jv_c_18', question: 'O que é "method overriding" (sobrescrita)?', answer: 'Quando uma subclasse fornece uma implementação específica para um método que já é fornecido por sua superclasse.' },
-                    { id: 'jv_c_19', question: 'O que é "method overloading" (sobrecarga)?', answer: 'Quando duas ou mais funções na mesma classe têm o mesmo nome, mas parâmetros diferentes (número ou tipo).' },
-                    { id: 'jv_c_20', question: 'Para que serve o bloco `try-catch-finally`?', answer: '`try` contém o código que pode lançar uma exceção. `catch` captura e trata a exceção. `finally` contém código que é sempre executado, ocorrendo exceção ou não.' },
+                { id: 'c_i_1', name: 'Estruturas de Dados e Funções', difficulty: 'Intermediário', cards: [
+                    { id: 'c_c_11', question: 'O que é uma `struct` em C?', answer: 'Um tipo de dado complexo que agrupa variáveis de diferentes tipos sob um único nome.' },
+                    { id: 'c_c_12', question: 'Qual a diferença entre um `array` e uma `struct`?', answer: 'Um array armazena múltiplos valores do mesmo tipo. Uma struct pode armazenar múltiplos valores de tipos diferentes.' },
+                    { id: 'c_c_13', question: 'O que a função `malloc()` faz?', answer: 'Aloca um bloco de memória de um tamanho especificado em bytes e retorna um ponteiro para o início do bloco.' },
+                    { id: 'c_c_14', question: 'Por que é importante usar `free()` após `malloc()`?', answer: 'Para liberar a memória alocada dinamicamente, evitando vazamentos de memória (memory leaks).' },
+                    { id: 'c_c_15', question: 'O que significa "passagem por valor" em uma função?', answer: 'Significa que uma cópia do valor do argumento é passada para a função. Alterações no parâmetro dentro da função não afetam a variável original.' },
+                    { id: 'c_c_16', question: 'O que significa "passagem por referência" em C?', answer: 'É simulada passando um ponteiro (o endereço da variável) para a função. Isso permite que a função modifique a variável original.' },
+                    { id: 'c_c_17', question: 'O que é uma `union`?', answer: 'Similar a uma `struct`, mas todos os seus membros compartilham o mesmo local de memória. Apenas um membro pode ser usado por vez.' },
+                    { id: 'c_c_18', question: 'Para que serve a palavra-chave `typedef`?', answer: 'Para criar um novo nome (um alias) para um tipo de dado existente.' },
+                    { id: 'c_c_19', question: 'O que são arquivos de cabeçalho (`.h`)?', answer: 'Arquivos que contêm declarações de funções, tipos e macros para serem compartilhados entre diferentes arquivos de código fonte (`.c`).' },
+                    { id: 'c_c_20', question: 'Qual a diferença entre `char *str` e `char str[]` na declaração de uma string?', answer: '`char *str` cria um ponteiro para um literal de string (geralmente em memória somente leitura). `char str[]` cria um array de caracteres que pode ser modificado.' },
                 ]},
-                { id: 'jv_a_1', name: 'Tópicos Avançados e API', difficulty: 'Avançado', cards: [
-                    { id: 'jv_c_21', question: 'O que é a "Collections Framework" em Java?', answer: 'Uma arquitetura unificada para representar e manipular coleções, como List, Set e Map.' },
-                    { id: 'jv_c_22', question: 'Qual a diferença entre `ArrayList` e `LinkedList`?', answer: '`ArrayList` usa um array dinâmico, oferecendo acesso rápido por índice. `LinkedList` usa uma lista duplamente encadeada, oferecendo inserções e remoções rápidas.' },
-                    { id: 'jv_c_23', question: 'O que são "Generics" em Java?', answer: 'Permitem que tipos (classes e interfaces) sejam parâmetros ao definir classes, interfaces e métodos. Fornecem segurança de tipo em tempo de compilação.' },
-                    { id: 'jv_c_24', question: 'O que são "Lambda Expressions" (a partir do Java 8)?', answer: 'Uma forma curta de representar uma função anônima (uma instância de uma interface funcional).' },
-                    { id: 'jv_c_25', question: 'O que é a "Stream API"?', answer: 'Uma API para processar sequências de elementos de forma funcional. Permite operações como `filter`, `map`, `reduce` em coleções.' },
-                    { id: 'jv_c_26', question: 'O que é uma "interface funcional"?', answer: 'Uma interface que contém exatamente um método abstrato. É anotada com `@FunctionalInterface`.' },
-                    { id: 'jv_c_27', question: 'Como se cria e inicia uma thread em Java?', answer: 'Estendendo a classe `Thread` ou implementando a interface `Runnable` e passando a instância para um construtor de `Thread`. A thread é iniciada com o método `.start()`.' },
-                    { id: 'jv_c_28', question: 'O que a palavra-chave `synchronized` faz?', answer: 'Garante que apenas um thread por vez possa executar um bloco de código ou método, prevenindo condições de corrida.' },
-                    { id: 'jv_c_29', question: 'O que é "Reflection API"?', answer: 'Permite que um programa Java examine ou modifique o comportamento de classes, métodos e interfaces em tempo de execução.' },
-                    { id: 'jv_c_30', question: 'Qual a diferença entre `HashMap` e `Hashtable`?', answer: '`HashMap` não é sincronizada (não é thread-safe) e permite uma chave nula e múltiplos valores nulos. `Hashtable` é sincronizada e não permite chaves ou valores nulos.' },
+                { id: 'c_a_1', name: 'Gerenciamento de Memória e Tópicos Avançados', difficulty: 'Avançado', cards: [
+                    { id: 'c_c_21', question: 'O que é um ponteiro para função?', answer: 'Uma variável que armazena o endereço de uma função. Permite que funções sejam passadas como argumentos ou retornadas de outras funções.' },
+                    { id: 'c_c_22', question: 'Para que serve a função `realloc()`?', answer: 'Para redimensionar um bloco de memória previamente alocado por `malloc` ou `calloc`.' },
+                    { id: 'c_c_23', question: 'O que são "bitfields" em uma `struct`?', answer: 'Permitem especificar o número de bits que um membro de uma struct deve ocupar, útil para economizar memória.' },
+                    { id: 'c_c_24', question: 'O que a palavra-chave `volatile` indica ao compilador?', answer: 'Que o valor de uma variável pode ser alterado por algo fora do controle do programa (ex: hardware), e o compilador não deve aplicar otimizações que assumam que o valor é constante.' },
+                    { id: 'c_c_25', question: 'Qual a diferença entre o pré-processador, o compilador e o linker?', answer: 'Pré-processador trata diretivas (`#include`, `#define`). Compilador traduz o código C para código de máquina. Linker combina o código de máquina com bibliotecas para criar um executável.' },
+                    { id: 'c_c_26', question: 'O que é um "dangling pointer" (ponteiro pendurado)?', answer: 'Um ponteiro que aponta para um local de memória que foi liberado (`free`). Acessá-lo causa comportamento indefinido.' },
+                    { id: 'c_c_27', question: 'Para que serve a palavra-chave `static` em uma variável local?', answer: 'Faz com que a variável mantenha seu valor entre as chamadas da função. Ela é inicializada apenas uma vez.' },
+                    { id: 'c_c_28', question: 'Para que serve a palavra-chave `static` em uma função ou variável global?', answer: 'Restringe a visibilidade da função ou variável ao arquivo onde foi declarada (escopo de arquivo).' },
+                    { id: 'c_c_29', question: 'O que é recursão?', answer: 'O processo no qual uma função chama a si mesma, direta ou indiretamente. Requer uma condição de parada para evitar um loop infinito.' },
+                    { id: 'c_c_30', question: 'O que é o "stack" e o "heap" na memória de um programa C?', answer: 'O "stack" é usado para variáveis locais e chamadas de função (gerenciamento automático). O "heap" é usado para alocação dinâmica de memória (`malloc`), que deve ser gerenciada manualmente.' },
                 ]}
+            ],
+            frameworks: []
+        },
+        {
+            language: 'JavaScript',
+            category: 'Front-end',
+            decks: [
+                { id: 'js_b_1_fe', name: 'DOM e Eventos', difficulty: 'Iniciante', cards: [
+                    { id: 'fe_js_1', question: 'O que é o DOM?', answer: 'Document Object Model. É uma interface de programação para documentos HTML que representa a página para que os programas possam alterar a estrutura, estilo e conteúdo do documento.' },
+                    { id: 'fe_js_2', question: 'Como se seleciona um elemento HTML pelo seu ID?', answer: '`document.getElementById("meuId");`' },
+                    { id: 'fe_js_3', question: 'Como se adiciona um "event listener" a um botão?', answer: '`botao.addEventListener("click", minhaFuncao);`' },
+                    { id: 'fe_js_4', question: 'O que o objeto `event` representa em um event listener?', answer: 'Contém informações sobre o evento que ocorreu, como o elemento alvo (`event.target`), as teclas pressionadas, etc.' },
+                    { id: 'fe_js_5', question: 'Qual a diferença entre `innerHTML` e `textContent`?', answer: '`innerHTML` interpreta o conteúdo como HTML, podendo criar novos elementos. `textContent` trata todo o conteúdo como texto puro.' },
+                    { id: 'fe_js_6', question: 'Como se altera o estilo CSS de um elemento com JavaScript?', answer: '`elemento.style.propriedade = "valor";` (ex: `elemento.style.color = "red";`)' },
+                    { id: 'fe_js_7', question: 'O que `querySelector` faz?', answer: 'Retorna o primeiro elemento dentro do documento que corresponde ao seletor CSS especificado.' },
+                    { id: 'fe_js_8', question: 'O que `querySelectorAll` faz?', answer: 'Retorna uma `NodeList` estática representando uma lista de elementos do documento que correspondem ao grupo de seletores especificado.' },
+                    { id: 'fe_js_9', question: 'Como se cria um novo elemento HTML (ex: um `<div>`) com JavaScript?', answer: '`document.createElement("div");`' },
+                    { id: 'fe_js_10', question: 'Como se adiciona um elemento criado a outro elemento na página?', answer: 'Usando `elementoPai.appendChild(elementoFilho);`.' },
+                ]},
+                { id: 'js_i_1_fe', name: 'Assincronismo e APIs Web', difficulty: 'Intermediário', cards: [
+                    { id: 'fe_js_11', question: 'O que é AJAX?', answer: 'Asynchronous JavaScript and XML. É uma técnica para acessar servidores web a partir de uma página da web de forma assíncrona.' },
+                    { id: 'fe_js_12', question: 'Para que serve a API `fetch`?', answer: 'Para fazer requisições de rede (como GET, POST) a um servidor. Ela é baseada em Promises.' },
+                    { id: 'fe_js_13', question: 'O que é JSON?', answer: 'JavaScript Object Notation. Um formato leve de troca de dados, fácil para humanos lerem e para máquinas analisarem.' },
+                    { id: 'fe_js_14', question: 'Como se converte um objeto JavaScript para uma string JSON?', answer: '`JSON.stringify(meuObjeto);`' },
+                    { id: 'fe_js_15', question: 'Como se converte uma string JSON para um objeto JavaScript?', answer: '`JSON.parse(minhaStringJSON);`' },
+                    { id: 'fe_js_16', question: 'O que é o `localStorage`?', answer: 'Uma API de armazenamento do navegador que permite salvar pares chave-valor de forma persistente, sem data de expiração.' },
+                    { id: 'fe_js_17', question: 'Qual a diferença entre `localStorage` e `sessionStorage`?', answer: '`localStorage` persiste mesmo após o navegador ser fechado. `sessionStorage` é limpo quando a sessão da página termina (a aba é fechada).' },
+                    { id: 'fe_js_18', question: 'O que é "event bubbling" (borbulhamento de eventos)?', answer: 'Quando um evento ocorre em um elemento, ele primeiro executa os manipuladores nesse elemento, depois nos seus pais, e assim por diante, subindo na árvore do DOM.' },
+                    { id: 'fe_js_19', question: 'Como se previne o comportamento padrão de um evento (ex: enviar um formulário)?', answer: 'Chamando `event.preventDefault();` dentro do event listener.' },
+                    { id: 'fe_js_20', question: 'O que é uma API RESTful?', answer: 'Um estilo de arquitetura para projetar aplicações em rede, baseado em um conjunto de princípios que usam os métodos HTTP (GET, POST, PUT, DELETE) para operações CRUD.' },
+                ]},
+                { id: 'js_a_1_fe', name: 'Tópicos Avançados de Front-end', difficulty: 'Avançado', cards: [
+                    { id: 'fe_js_21', question: 'O que são Web Components?', answer: 'Um conjunto de tecnologias da web que permitem criar elementos HTML personalizados, reutilizáveis e encapsulados.' },
+                    { id: 'fe_js_22', question: 'Quais são as três principais tecnologias dos Web Components?', answer: 'Custom Elements, Shadow DOM e HTML Templates.' },
+                    { id: 'fe_js_23', question: 'O que é o Shadow DOM?', answer: 'Uma forma de encapsular o DOM e o CSS de um componente, mantendo-os separados do DOM principal do documento.' },
+                    { id: 'fe_js_24', question: 'O que é um Service Worker?', answer: 'Um script que o navegador executa em segundo plano, separado de uma página da web, permitindo recursos como notificações push e funcionalidades offline.' },
+                    { id: 'fe_js_25', question: 'Para que serve o "Intersection Observer API"?', answer: 'Fornece uma maneira de observar de forma assíncrona as mudanças na interseção de um elemento alvo com um elemento ancestral ou com o viewport.' },
+                    { id: 'fe_js_26', question: 'O que é "Tree Shaking"?', answer: 'Um termo para a eliminação de código morto (dead-code elimination). É um passo comum em bundlers de módulos JavaScript como Webpack ou Rollup.' },
+                    { id: 'fe_js_27', question: 'O que é o Virtual DOM?', answer: 'Uma representação do DOM em memória. Frameworks como React usam-no para reconciliar as mudanças de estado e atualizar o DOM real de forma eficiente.' },
+                    { id: 'fe_js_28', question: 'O que é "lazy loading" de imagens?', answer: 'Uma técnica para adiar o carregamento de imagens que não estão na janela de visualização inicial até que o usuário role a página até elas.' },
+                    { id: 'fe_js_29', question: 'O que é o "Critical Rendering Path"?', answer: 'A sequência de passos que o navegador executa para converter o HTML, CSS e JavaScript em pixels na tela. Otimizá-lo é crucial para a performance.' },
+                    { id: 'fe_js_30', question: 'O que é o CORS (Cross-Origin Resource Sharing)?', answer: 'Um mecanismo que usa cabeçalhos HTTP adicionais para permitir que um agente de usuário obtenha permissão para acessar recursos selecionados de um servidor em uma origem diferente.' },
+                ]}
+            ],
+            frameworks: [
+                {
+                    name: 'React',
+                    decks: [
+                        { id: 're_b_1', name: 'Fundamentos do React', difficulty: 'Iniciante', cards: [
+                            { id: 're_c_1', question: 'O que é React?', answer: 'Uma biblioteca JavaScript para construir interfaces de usuário, focada em componentes.' },
+                            { id: 're_c_2', question: 'O que é JSX?', answer: 'Uma extensão de sintaxe para JavaScript que se parece com HTML. É usada para descrever como a UI deve se parecer.' },
+                            { id: 're_c_3', question: 'O que é um "componente" em React?', answer: 'Uma peça de UI independente e reutilizável. Pode ser uma função ou uma classe.' },
+                            { id: 're_c_4', question: 'O que são "props"?', answer: 'Abreviação de propriedades. São entradas somente leitura para componentes, usadas para passar dados de um componente pai para um filho.' },
+                            { id: 're_c_5', question: 'O que é "state" (estado)?', answer: 'Um objeto que representa as partes de um componente que podem mudar ao longo do tempo. É gerenciado dentro do componente.' },
+                            { id: 're_c_6', question: 'Qual a diferença entre state e props?', answer: 'Props são passadas para o componente (como parâmetros de função), enquanto o state é gerenciado dentro do componente (como variáveis declaradas em uma função).' },
+                            { id: 're_c_7', question: 'O que o método `render()` faz em um componente de classe?', answer: 'Retorna os elementos React (geralmente via JSX) que devem ser renderizados na tela.' },
+                            { id: 're_c_8', question: 'Como se lida com eventos em React (ex: `onClick`)?', answer: 'De forma similar ao HTML, mas com nomes em camelCase (ex: `onClick`) e passando uma função como manipulador de evento.' },
+                            { id: 're_c_9', question: 'O que é "renderização condicional"?', answer: 'A prática de renderizar diferentes elementos ou componentes com base em certas condições (ex: usando `if` ou o operador ternário).' },
+                            { id: 're_c_10', question: 'Por que as "keys" são importantes ao renderizar listas?', answer: 'Ajudam o React a identificar quais itens foram alterados, adicionados ou removidos, otimizando a atualização da UI.' },
+                        ]},
+                        { id: 're_i_1', name: 'Hooks e Ciclo de Vida', difficulty: 'Intermediário', cards: [
+                            { id: 're_c_11', question: 'O que são "Hooks"?', answer: 'Funções que permitem "enganchar" no estado e ciclo de vida do React a partir de componentes de função.' },
+                            { id: 're_c_12', question: 'Qual a função do Hook `useState`?', answer: 'Adiciona estado a um componente de função. Retorna o valor do estado atual e uma função para atualizá-lo.' },
+                            { id: 're_c_13', question: 'Para que serve o Hook `useEffect`?', answer: 'Permite executar efeitos colaterais (side effects) em componentes de função, como buscar dados, manipular o DOM ou definir subscriptions.' },
+                            { id: 're_c_14', question: 'O que é o array de dependências no `useEffect`?', answer: 'Controla quando o efeito é executado. Se vazio `[]`, executa apenas uma vez. Se tiver variáveis, executa quando elas mudam.' },
+                            { id: 're_c_15', question: 'O que é o "Context API"?', answer: 'Uma forma de passar dados através da árvore de componentes sem ter que passar props manualmente em todos os níveis.' },
+                            { id: 're_c_16', question: 'Para que serve o Hook `useContext`?', answer: 'Para consumir um valor de um Contexto React, evitando o uso de um `Context.Consumer`.' },
+                            { id: 're_c_17', question: 'O que é um "Hook customizado"?', answer: 'Uma função JavaScript cujo nome começa com "use" e que pode chamar outros Hooks. É uma forma de reutilizar lógica de estado.' },
+                            { id: 're_c_18', question: 'Qual a diferença entre um componente controlado e não controlado?', answer: 'Em um componente controlado, os dados do formulário são tratados pelo estado do React. Em um não controlado, os dados são tratados pelo próprio DOM.' },
+                            { id: 're_c_19', question: 'O que é "lifting state up" (elevar o estado)?', answer: 'A prática de mover o estado para o ancestral comum mais próximo quando múltiplos componentes precisam compartilhar e refletir os mesmos dados.' },
+                            { id: 're_c_20', question: 'Para que servem `React.memo` e `PureComponent`?', answer: 'Para otimizar a performance, evitando que um componente seja re-renderizado se suas props não mudaram.' },
+                        ]},
+                        { id: 're_a_1', name: 'Gerenciamento de Estado e Tópicos Avançados', difficulty: 'Avançado', cards: [
+                            { id: 're_c_21', question: 'O que é Redux?', answer: 'Uma biblioteca de gerenciamento de estado previsível para aplicações JavaScript. Ajuda a gerenciar o estado global da aplicação de forma consistente.' },
+                            { id: 're_c_22', question: 'Quais são os três princípios do Redux?', answer: 'Única fonte de verdade (single source of truth), estado é somente leitura (state is read-only), e as mudanças são feitas com funções puras (reducers).' },
+                            { id: 're_c_23', question: 'O que é um "reducer" no Redux?', answer: 'Uma função pura que recebe o estado anterior e uma ação, e retorna o próximo estado.' },
+                            { id: 're_c_24', question: 'O que é uma "action" no Redux?', answer: 'Um objeto simples que representa uma intenção de mudar o estado. Deve ter uma propriedade `type`.' },
+                            { id: 're_c_25', question: 'Para que serve o Hook `useReducer`?', answer: 'Uma alternativa ao `useState` para lógicas de estado mais complexas que envolvem múltiplos sub-valores ou dependem do estado anterior.' },
+                            { id: 're_c_26', question: 'Para que serve o Hook `useCallback`?', answer: 'Retorna uma versão "memoizada" da função de callback que só muda se uma das dependências mudar. Útil para otimizar componentes filhos.' },
+                            { id: 're_c_27', question: 'Para que serve o Hook `useMemo`?', answer: 'Retorna um valor "memoizado". Ele só recalcula o valor quando uma de suas dependências muda. Útil para otimizar cálculos caros.' },
+                            { id: 're_c_28', question: 'O que são "Higher-Order Components" (HOC)?', answer: 'Uma técnica avançada em React para reutilizar a lógica de componentes. Um HOC é uma função que recebe um componente e retorna um novo componente.' },
+                            { id: 're_c_29', question: 'O que são "Portals" em React?', answer: 'Fornecem uma maneira de renderizar filhos em um nó do DOM que existe fora da hierarquia do DOM do componente pai. Útil para modais e tooltips.' },
+                            { id: 're_c_30', question: 'O que é "Code Splitting"?', answer: 'Uma técnica suportada por bundlers como o Webpack que permite criar múltiplos "bundles" que podem ser carregados dinamicamente em tempo de execução. Melhora o tempo de carregamento inicial.' },
+                        ]}
+                    ]
+                }
             ]
         }
     ];
-    codeDecks.forEach(lang => lang.decks.forEach(deck => {
-        deck.type = 'code';
-        deck.cards.forEach(card => {
-            card.deckId = deck.id;
-            card.dueDate = null;
-            card.interval = 0;
+    codeDecks.forEach(lang => {
+        lang.decks.forEach(deck => {
+            deck.type = 'code';
+            deck.cards.forEach(card => {
+                card.deckId = deck.id;
+                card.dueDate = null;
+                card.interval = 0;
+            });
         });
-    }));
+        lang.frameworks.forEach(fw => {
+            fw.decks.forEach(deck => {
+                deck.type = 'code';
+                deck.cards.forEach(card => {
+                    card.deckId = deck.id;
+                    card.dueDate = null;
+                    card.interval = 0;
+                });
+            });
+        });
+    });
 
     const views = document.querySelectorAll('.view-container');
     const navButtons = document.querySelectorAll('.nav-button');
@@ -235,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (viewId === 'stats-view') renderStatistics('custom');
         if (viewId === 'dashboard-view') renderDecks();
-        if (viewId === 'code-decks-view') renderCodeDecks();
+        if (viewId === 'code-decks-view') renderCodeDecks('Back-end');
     }
 
     function renderDecks(filter = '') {
@@ -271,40 +416,69 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function renderCodeDecks() {
+    function renderCodeDecks(category) {
         codeDecksContainer.innerHTML = '';
-        codeDecks.forEach(lang => {
+        const categoryTabs = codeDecksContainer.previousElementSibling.querySelector('.code-category-tabs');
+        categoryTabs.querySelectorAll('button').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.category === category);
+        });
+
+        const filteredLanguages = codeDecks.filter(lang => lang.category === category);
+
+        filteredLanguages.forEach(lang => {
             const langSection = document.createElement('div');
             langSection.className = 'language-section';
-            langSection.innerHTML = `<h3 class="language-title">${lang.language}</h3>`;
             
+            let subTabsHTML = `<div class="sub-tabs" data-lang="${lang.language}"><button class="sub-tab-btn active" data-content-id="${lang.language}-base">${lang.language}</button>`;
+            lang.frameworks.forEach(fw => {
+                subTabsHTML += `<button class="sub-tab-btn" data-content-id="${lang.language}-${fw.name}">${fw.name}</button>`;
+            });
+            subTabsHTML += `</div>`;
+
+            let contentHTML = `<div class="language-content">`;
+            
+            // Base language decks
+            contentHTML += `<div class="sub-tab-content active" id="${lang.language}-base">`;
             const levels = { 'Iniciante': [], 'Intermediário': [], 'Avançado': [] };
             lang.decks.forEach(deck => levels[deck.difficulty].push(deck));
-
             Object.keys(levels).forEach(level => {
                 if (levels[level].length > 0) {
-                    const levelSection = document.createElement('div');
-                    levelSection.className = 'level-section';
-                    levelSection.innerHTML = `<h4 class="level-title">${level}</h4>`;
-                    
-                    const deckGrid = document.createElement('div');
-                    deckGrid.className = 'code-deck-grid';
-
+                    contentHTML += `<h4 class="level-title">${level}</h4><div class="code-deck-grid">`;
                     levels[level].forEach(deck => {
-                        const deckCard = document.createElement('div');
-                        deckCard.className = 'code-deck-card';
-                        deckCard.dataset.deckId = deck.id;
-                        deckCard.dataset.deckType = 'code';
-                        deckCard.innerHTML = `
-                            <div class="code-deck-name">${deck.name}</div>
-                            <div class="code-deck-card-count">${deck.cards.length} cartas</div>
-                        `;
-                        deckGrid.appendChild(deckCard);
+                        contentHTML += `
+                            <div class="code-deck-card" data-deck-id="${deck.id}" data-deck-type="code">
+                                <div class="code-deck-name">${deck.name}</div>
+                                <div class="code-deck-card-count">${deck.cards.length} cartas</div>
+                            </div>`;
                     });
-                    levelSection.appendChild(deckGrid);
-                    langSection.appendChild(levelSection);
+                    contentHTML += `</div>`;
                 }
             });
+            contentHTML += `</div>`;
+
+            // Framework decks
+            lang.frameworks.forEach(fw => {
+                contentHTML += `<div class="sub-tab-content" id="${lang.language}-${fw.name}">`;
+                const fwLevels = { 'Iniciante': [], 'Intermediário': [], 'Avançado': [] };
+                fw.decks.forEach(deck => fwLevels[deck.difficulty].push(deck));
+                Object.keys(fwLevels).forEach(level => {
+                    if (fwLevels[level].length > 0) {
+                        contentHTML += `<h4 class="level-title">${level}</h4><div class="code-deck-grid">`;
+                        fwLevels[level].forEach(deck => {
+                            contentHTML += `
+                                <div class="code-deck-card" data-deck-id="${deck.id}" data-deck-type="code">
+                                    <div class="code-deck-name">${deck.name}</div>
+                                    <div class="code-deck-card-count">${deck.cards.length} cartas</div>
+                                </div>`;
+                        });
+                        contentHTML += `</div>`;
+                    }
+                });
+                contentHTML += `</div>`;
+            });
+
+            contentHTML += `</div>`;
+            langSection.innerHTML = `<h3 class="language-title">${lang.language}</h3>${subTabsHTML}${contentHTML}`;
             codeDecksContainer.appendChild(langSection);
         });
     }
@@ -347,8 +521,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (deckType === 'custom') {
             cardsForDeck = cards.filter(c => c.deckId === deckId);
         } else {
-            const lang = codeDecks.find(l => l.decks.some(d => d.id === deckId));
-            const deck = lang.decks.find(d => d.id === deckId);
+            let deck;
+            for(const lang of codeDecks) {
+                let foundDeck = lang.decks.find(d => d.id === deckId);
+                if(foundDeck) {
+                    deck = foundDeck;
+                    break;
+                }
+                for(const fw of lang.frameworks) {
+                    foundDeck = fw.decks.find(d => d.id === deckId);
+                    if(foundDeck) {
+                        deck = foundDeck;
+                        break;
+                    }
+                }
+                if(deck) break;
+            }
             cardsForDeck = deck.cards.map(originalCard => {
                 const progress = codeCardsProgress.find(p => p.id === originalCard.id);
                 return progress ? {...originalCard, ...progress} : {...originalCard};
@@ -629,7 +817,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     codeDecksContainer.addEventListener('click', (e) => {
         const studyTarget = e.target.closest('.code-deck-card');
-        if (studyTarget) startStudy(studyTarget.dataset.deckId, studyTarget.dataset.deckType);
+        if (studyTarget) {
+            startStudy(studyTarget.dataset.deckId, studyTarget.dataset.deckType);
+            return;
+        }
+
+        const subTabTarget = e.target.closest('.sub-tab-btn');
+        if (subTabTarget) {
+            const parent = subTabTarget.parentElement;
+            parent.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+            subTabTarget.classList.add('active');
+
+            const contentId = subTabTarget.dataset.contentId;
+            const contentParent = parent.nextElementSibling;
+            contentParent.querySelectorAll('.sub-tab-content').forEach(content => {
+                content.classList.toggle('active', content.id === contentId);
+            });
+        }
+    });
+
+    document.getElementById('code-decks-view').addEventListener('click', (e) => {
+        const categoryTarget = e.target.closest('.code-category-btn');
+        if (categoryTarget) {
+            renderCodeDecks(categoryTarget.dataset.category);
+        }
     });
 
     cardListContainer.addEventListener('click', (e) => {
